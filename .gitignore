@@ -1,0 +1,4 @@
+*.svn
+gen/
+bin/
+*.DS_Store
