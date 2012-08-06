@@ -1,9 +1,10 @@
-package com.suresh.where.is.my.cash;
+package com.suresh.whereismycash;
 
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
+import com.suresh.whereismycash.R;
 
 public class MainActivity extends SherlockListActivity {
 
