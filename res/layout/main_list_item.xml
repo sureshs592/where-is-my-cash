@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textSize="20sp"
         android:text="Suresh"
         tools:ignore="HardcodedText" />
@@ -37,6 +39,7 @@
         android:id="@+id/btDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:src="@drawable/content_discard"
         android:background="@null"
         android:contentDescription="@string/discard_button" />
