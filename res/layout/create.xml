@@ -32,7 +32,7 @@
 
         <EditText
             android:id="@+id/etAmount"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="How much?"
@@ -41,16 +41,17 @@
             <requestFocus />
         </EditText>
 
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="200dp"
+        <AutoCompleteTextView
+            android:id="@+id/autoEtName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="From/To whom?" />
+            android:hint="From/To whom?"
+            android:completionThreshold="1" />
 
         <EditText
             android:id="@+id/etReason"
-            android:layout_width="250dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="For what? (Optional)" />

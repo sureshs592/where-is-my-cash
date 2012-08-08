@@ -66,8 +66,13 @@ public class DbHelper extends SQLiteOpenHelper {
 	public Cursor getAllLoans() {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ")"};
-		Cursor c = db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, KEY_CREATED_AT + " desc");
-		return c;
+		return db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, KEY_CREATED_AT + " desc"); 
+	}
+	
+	public Cursor getDistinctNames() {
+		SQLiteDatabase db = getWritableDatabase();
+		String[] columns = {KEY_ID, KEY_NAME};
+		return db.query(true, DATABASE_TABLE, columns, null, null, null, null, null, null);
 	}
 
 }
