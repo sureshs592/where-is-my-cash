@@ -1,16 +1,20 @@
 package com.suresh.whereismycash;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.FilterQueryProvider;
 
 public class DbHelper extends SQLiteOpenHelper {
 	
 	private static final String TAG = "DbHelper";
+	
+	public enum PaymentType { GET, PAY }
 	
     /**
      * Database values and creation statement
@@ -20,9 +24,8 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_CREATE =
 	    "create table loans (_id integer primary key autoincrement, "
-	    + "name varchar(100) not null, amount float not null, reason text, " +
-	    "created_at timestamp not null default current_timestamp, ref_id integer, " +
-	    "foreign key (ref_id) references loans(_id))";
+	    + "name varchar(100) not null, amount float not null, paid float not null, note text, " +
+	    "created_at timestamp not null default current_timestamp";
     
     /**
      * SQL Column Keys
@@ -30,9 +33,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME = "name";
     public static final String KEY_AMOUNT = "amount";
-    public static final String KEY_REASON = "reason";
+    public static final String KEY_PAID = "paid";
+    public static final String KEY_NOTE = "note";
     public static final String KEY_CREATED_AT = "created_at";
-    public static final String KEY_REF_ID = "ref_id";
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -80,7 +83,33 @@ public class DbHelper extends SQLiteOpenHelper {
 		String match = "%" + input + "%";
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_NAME};
-		return db.query(true, DATABASE_TABLE, columns, KEY_NAME + " LIKE ?", new String[]{match}, null, null, null, null);
+		return db.query(true, DATABASE_TABLE, columns,
+				KEY_NAME + " LIKE ?", new String[]{match}, null, null, null, null);
+	}
+	
+	public boolean addEntry(PaymentType type, float amount,
+			String name, String note, Calendar date) {
+		SQLiteDatabase db = getWritableDatabase();
+		ContentValues val = new ContentValues();
+		float storedAmount = (float) 0.0;
+		switch(type) {
+		case GET:
+			storedAmount = -1 * amount;
+			break;
+		case PAY:
+			storedAmount = amount;
+			break;
+		}
+		val.put(KEY_AMOUNT, storedAmount);
+		
+		val.put(KEY_NAME, name);
+		if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
+		
+		Timestamp timestamp = new Timestamp(date.getTimeInMillis());
+		val.put(KEY_CREATED_AT, timestamp.toString());
+		
+		db.insert(DATABASE_TABLE, null, val);
+		return true;
 	}
 
 }
