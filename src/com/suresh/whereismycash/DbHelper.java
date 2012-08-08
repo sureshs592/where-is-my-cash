@@ -52,6 +52,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		val2.put(KEY_NAME, "Raji");
 		val2.put(KEY_AMOUNT, 150);
 		db.insert(DATABASE_TABLE, null, val2);
+		db.close();
 	}
 
 	@Override
@@ -69,22 +70,17 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	public Cursor getAllLoans() {
 		SQLiteDatabase db = getWritableDatabase();
-		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ")"};
-		return db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, KEY_CREATED_AT + " desc"); 
-	}
-	
-	public Cursor getDistinctNames() {
-		SQLiteDatabase db = getWritableDatabase();
-		String[] columns = {KEY_ID, KEY_NAME};
-		return db.query(true, DATABASE_TABLE, columns, null, null, null, null, null, null);
+		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ") + SUM(" + KEY_PAID + ") as amount"};
+		Cursor c = db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, KEY_CREATED_AT + " desc");
+		return c;
 	}
 	
 	public Cursor getMatchingNames(String input) {
-		String match = "%" + input + "%";
 		SQLiteDatabase db = getWritableDatabase();
-		String[] columns = {KEY_ID, KEY_NAME};
-		return db.query(true, DATABASE_TABLE, columns,
-				KEY_NAME + " LIKE ?", new String[]{match}, null, null, null, null);
+		String query = "SELECT " + KEY_NAME + ", _id FROM " + DATABASE_TABLE +
+				" WHERE " + KEY_NAME + " LIKE ? GROUP BY " + KEY_NAME;
+		Cursor c = db.rawQuery(query, new String[]{input + "%"});
+		return c;
 	}
 	
 	public boolean addEntry(PaymentType type, float amount,
@@ -109,6 +105,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		val.put(KEY_CREATED_AT, timestamp.toString());
 		
 		db.insert(DATABASE_TABLE, null, val);
+		db.close();
 		return true;
 	}
 
