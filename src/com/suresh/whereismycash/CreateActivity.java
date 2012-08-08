@@ -8,6 +8,8 @@ import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
@@ -18,21 +20,23 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
-public class CreateActivity extends SherlockActivity implements FilterQueryProvider, OnClickListener {
+public class CreateActivity extends SherlockActivity implements FilterQueryProvider, OnClickListener, OnItemClickListener {
 	private DbHelper dbHelper;
+	private AutoCompleteTextView auto; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create);
 		dbHelper = new DbHelper(this);
-		AutoCompleteTextView auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
+		auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
 				this, android.R.layout.simple_list_item_1, null,
 				new String[]{DbHelper.KEY_NAME}, new int[]{android.R.id.text1},
 				CursorAdapter.FLAG_AUTO_REQUERY);
 		adapter.setFilterQueryProvider(this);
 		auto.setAdapter(adapter);
+		auto.setOnItemClickListener(this);
 		findViewById(R.id.btAdd).setOnClickListener(this);
 	}
 	
@@ -73,5 +77,11 @@ public class CreateActivity extends SherlockActivity implements FilterQueryProvi
 		return (constraint == null)
 			? null
 			: dbHelper.getMatchingNames(constraint.toString());
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		TextView tv = (TextView) view.findViewById(android.R.id.text1);
+		auto.setText(tv.getText());
 	}
 }
