@@ -3,4 +3,6 @@
 
     <string name="edit_button">Edit</string>
     <string name="discard_button">Delete</string>
+    <string name="Get">Get</string>
+    <string name="Pay">Pay</string>
 </resources>

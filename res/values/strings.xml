@@ -2,7 +2,7 @@
 
     <string name="app_name">Where\'s My Cash</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_add">Add</string>
     <string name="title_activity_main">Where\'s My Cash</string>
 
 </resources>
