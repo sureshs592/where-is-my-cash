@@ -18,9 +18,10 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_TABLE = "loans";
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_CREATE =
-	    "create table " + DATABASE_TABLE + " (_id integer primary key autoincrement, "
-	    + "name varchar(100) not null, amount float not null, paid float not null default 0, reason text, " +
-	    "receive tinyint(1) not null, created_at timestamp not null default current_timestamp);";
+	    "create table loans (_id integer primary key autoincrement, "
+	    + "name varchar(100) not null, amount float not null, reason text, " +
+	    "created_at timestamp not null default current_timestamp, ref_id integer, " +
+	    "foreign key (ref_id) references loans(_id))";
     
     /**
      * SQL Column Keys
@@ -28,10 +29,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME = "name";
     public static final String KEY_AMOUNT = "amount";
-    public static final String KEY_PAID = "paid";
-    public static final String KEY_RECEIVE = "receive";
     public static final String KEY_REASON = "reason";
     public static final String KEY_CREATED_AT = "created_at";
+    public static final String KEY_REF_ID = "ref_id";
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,14 +41,12 @@ public class DbHelper extends SQLiteOpenHelper {
 	private void initDummyData() {
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues val = new ContentValues();
-		val.put(KEY_NAME, "Suresh");
-		val.put(KEY_AMOUNT, 100);
-		val.put(KEY_RECEIVE, true);
+		val.put(KEY_NAME, "Subbu");
+		val.put(KEY_AMOUNT, -50);
 		db.insert(DATABASE_TABLE, null, val);
 		ContentValues val2 = new ContentValues();
-		val2.put(KEY_NAME, "Akshay");
-		val2.put(KEY_AMOUNT, 200);
-		val2.put(KEY_RECEIVE, true);
+		val2.put(KEY_NAME, "Raji");
+		val2.put(KEY_AMOUNT, 150);
 		db.insert(DATABASE_TABLE, null, val2);
 	}
 
@@ -65,11 +63,10 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
 	}
 	
-	public Cursor getAllLoans(boolean receive) {
-		int check = receive ? 1 : 0;
+	public Cursor getAllLoans() {
 		SQLiteDatabase db = getWritableDatabase();
-		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ")", KEY_PAID};
-		Cursor c = db.query(DATABASE_TABLE, columns, KEY_RECEIVE + " = " + check, null, KEY_NAME, null, KEY_CREATED_AT + " desc");
+		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ")"};
+		Cursor c = db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, KEY_CREATED_AT + " desc");
 		return c;
 	}
 
