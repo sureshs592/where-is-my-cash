@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.FilterQueryProvider;
 
 public class DbHelper extends SQLiteOpenHelper {
 	
@@ -73,6 +74,13 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_NAME};
 		return db.query(true, DATABASE_TABLE, columns, null, null, null, null, null, null);
+	}
+	
+	public Cursor getMatchingNames(String input) {
+		String match = "%" + input + "%";
+		SQLiteDatabase db = getWritableDatabase();
+		String[] columns = {KEY_ID, KEY_NAME};
+		return db.query(true, DATABASE_TABLE, columns, KEY_NAME + " LIKE ?", new String[]{match}, null, null, null, null);
 	}
 
 }
