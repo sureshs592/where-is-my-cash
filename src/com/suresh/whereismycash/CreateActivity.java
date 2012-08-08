@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
@@ -16,7 +18,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
-public class CreateActivity extends SherlockActivity implements FilterQueryProvider {
+public class CreateActivity extends SherlockActivity implements FilterQueryProvider, OnClickListener {
 	private DbHelper dbHelper;
 	
 	@Override
@@ -31,12 +33,14 @@ public class CreateActivity extends SherlockActivity implements FilterQueryProvi
 				CursorAdapter.FLAG_AUTO_REQUERY);
 		adapter.setFilterQueryProvider(this);
 		auto.setAdapter(adapter);
+		findViewById(R.id.btAdd).setOnClickListener(this);
 	}
 	
 	public void create() {
 		RadioGroup radioType = (RadioGroup) findViewById(R.id.radioGroupType);
-		PaymentType type = (radioType.getCheckedRadioButtonId() == R.id.radioGet)
-				? DbHelper.PaymentType.GET : DbHelper.PaymentType.GET;
+		int checked = radioType.getCheckedRadioButtonId();
+		PaymentType type = (checked == R.id.radioGet)
+				? DbHelper.PaymentType.GET : DbHelper.PaymentType.PAY;
 		
 		String inputAmount = ((TextView) findViewById(R.id.etAmount)).getText().toString();
 		float amount = Float.parseFloat(inputAmount);
@@ -52,6 +56,16 @@ public class CreateActivity extends SherlockActivity implements FilterQueryProvi
 		
 		String text = (result) ? "Entry added successfully" : "Failed to add entry" ;
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		finish();
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btAdd:
+			create();
+			break;
+		}
 	}
 
 	@Override

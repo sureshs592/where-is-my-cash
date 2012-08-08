@@ -24,8 +24,8 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_CREATE =
 	    "create table loans (_id integer primary key autoincrement, "
-	    + "name varchar(100) not null, amount float not null, paid float not null, note text, " +
-	    "created_at timestamp not null default current_timestamp";
+	    + "name varchar(100) not null, amount float not null, paid float not null default 0, note text, " +
+	    "created_at timestamp not null default current_timestamp)";
     
     /**
      * SQL Column Keys
