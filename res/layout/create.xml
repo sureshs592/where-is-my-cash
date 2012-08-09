@@ -48,7 +48,7 @@
             android:maxLines="1"
             android:inputType="textCapWords"
             android:ems="10"
-            android:hint="From/To whom?"
+            android:hint="@string/from_hint"
             android:completionThreshold="1" />
 
         <EditText

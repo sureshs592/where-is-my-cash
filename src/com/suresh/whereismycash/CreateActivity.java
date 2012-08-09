@@ -14,15 +14,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
-public class CreateActivity extends SherlockActivity implements FilterQueryProvider, OnClickListener, OnItemClickListener {
+public class CreateActivity extends SherlockActivity implements
+FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListener {
 	private DbHelper dbHelper;
-	private AutoCompleteTextView auto; 
+	private AutoCompleteTextView auto;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class CreateActivity extends SherlockActivity implements FilterQueryProvi
 		auto.setAdapter(adapter);
 		auto.setOnItemClickListener(this);
 		findViewById(R.id.btAdd).setOnClickListener(this);
+		((RadioGroup) findViewById(R.id.radioGroupType)).setOnCheckedChangeListener(this);
 	}
 	
 	public void create() {
@@ -83,5 +86,19 @@ public class CreateActivity extends SherlockActivity implements FilterQueryProvi
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		TextView tv = (TextView) view.findViewById(android.R.id.text1);
 		auto.setText(tv.getText());
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		int id = 0;
+		switch (checkedId) {
+		case R.id.radioGet:
+			id = R.string.from_hint;
+			break;
+		case R.id.radioPay:
+			id = R.string.to_hint;
+			break;
+		}
+		auto.setHint(id);
 	}
 }

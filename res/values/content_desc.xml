@@ -5,4 +5,6 @@
     <string name="discard_button">Delete</string>
     <string name="Get">Get</string>
     <string name="Pay">Pay</string>
+    <string name="from_hint">From whom?</string>
+    <string name="to_hint">To whom?</string>
 </resources>
