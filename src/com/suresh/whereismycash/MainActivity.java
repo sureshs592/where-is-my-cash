@@ -18,9 +18,7 @@ public class MainActivity extends SherlockListActivity {
         setContentView(R.layout.activity_main);
         Cursor c = new DbHelper(this).getAllLoans();
         startManagingCursor(c);
-        String[] displayColumns = {DbHelper.KEY_AMOUNT, DbHelper.KEY_NAME};
-        int[] displayViews = {R.id.tvAmount, R.id.tvName};
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.main_list_item, c, displayColumns, displayViews, CursorAdapter.FLAG_AUTO_REQUERY);
+        CustomAdapter adapter = new CustomAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY);
         setListAdapter(adapter);
     }
 

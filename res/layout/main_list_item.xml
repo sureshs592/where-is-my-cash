@@ -11,9 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
-        android:layout_marginRight="8dp"
-        android:text="$10"
-        tools:ignore="HardcodedText" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/tvName"
@@ -23,17 +21,7 @@
         android:layout_weight="1"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textSize="20sp"
-        android:text="Suresh"
-        tools:ignore="HardcodedText" />
-
-    <ImageButton
-        android:id="@+id/btEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/content_edit"
-        android:background="@null"
-        android:contentDescription="@string/edit_button" />
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/btDelete"
