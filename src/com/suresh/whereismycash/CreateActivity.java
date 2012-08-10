@@ -63,6 +63,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		
 		String text = (result) ? "Entry added successfully" : "Failed to add entry" ;
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		setResult(RESULT_OK);
 		finish();
 	}
 	

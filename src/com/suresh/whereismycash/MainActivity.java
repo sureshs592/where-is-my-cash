@@ -15,6 +15,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class MainActivity extends SherlockListActivity {
 	
 	private DbHelper dbHelper = new DbHelper(this);
+	private static final int ACTION_ADD_ENTRY = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,12 +37,25 @@ public class MainActivity extends SherlockListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
     	case R.id.menu_add:
-    		startActivity(new Intent(this, CreateActivity.class));
+    		startActivityForResult(new Intent(this, CreateActivity.class), ACTION_ADD_ENTRY);
     		break;
     	default:
     		return super.onOptionsItemSelected(item);
     	}
     	return true;
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch (requestCode) {
+    	case ACTION_ADD_ENTRY:
+    		if (resultCode == RESULT_OK) {
+    			recreate();
+    		}
+    		break;
+    	default:
+    		super.onActivityResult(requestCode, resultCode, data);
+    	}
     }
     
 }
