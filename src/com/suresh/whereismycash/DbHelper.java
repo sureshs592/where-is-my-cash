@@ -108,5 +108,10 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.close();
 		return true;
 	}
+	
+	public void delete(String name) {
+		SQLiteDatabase db = getWritableDatabase();
+		db.delete(DATABASE_TABLE, KEY_NAME + " = ?", new String[]{name});
+	}
 
 }
