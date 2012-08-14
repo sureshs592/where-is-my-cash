@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:src="@drawable/content_discard"
+        android:background="@null"
         android:contentDescription="@string/discard_button" />
 
 </LinearLayout>
