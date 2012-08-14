@@ -7,6 +7,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
@@ -16,6 +17,7 @@ public class MainActivity extends SherlockListActivity {
 	
 	private DbHelper dbHelper = new DbHelper(this);
 	private static final int ACTION_ADD_ENTRY = 1;
+	private MainAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +25,7 @@ public class MainActivity extends SherlockListActivity {
         setContentView(R.layout.activity_main);
         Cursor c = dbHelper.getAllLoans();
         startManagingCursor(c);
-        CustomAdapter adapter = new CustomAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
+        adapter = new MainAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
         setListAdapter(adapter);
     }
 
@@ -43,6 +45,12 @@ public class MainActivity extends SherlockListActivity {
     		return super.onOptionsItemSelected(item);
     	}
     	return true;
+    }
+    
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+    	int rowId = (Integer) v.getTag();
+    	
     }
     
     @Override

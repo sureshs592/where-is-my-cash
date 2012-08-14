@@ -2,7 +2,6 @@ package com.suresh.whereismycash;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.sax.StartElementListener;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +9,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class CustomAdapter extends CursorAdapter implements OnClickListener {
+public class MainAdapter extends CursorAdapter implements OnClickListener {
 	
 	private DbHelper dbHelper;
 
-	public CustomAdapter(Context context, Cursor c, int flags, DbHelper dbHelper) {
+	public MainAdapter(Context context, Cursor c, int flags, DbHelper dbHelper) {
 		super(context, c, flags);
 		this.dbHelper = dbHelper;
 	}
@@ -42,6 +41,8 @@ public class CustomAdapter extends CursorAdapter implements OnClickListener {
 		tvAmount.setTextColor(context.getResources().getColor(color));
 		
 		view.findViewById(R.id.btDelete).setTag(name);
+		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
+		view.setTag(id);
 	}
 
 	@Override
