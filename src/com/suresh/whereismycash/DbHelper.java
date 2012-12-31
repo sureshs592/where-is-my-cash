@@ -24,8 +24,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_CREATE =
 	    "create table loans (_id integer primary key autoincrement, "
-	    + "name varchar(100) not null, amount float not null, paid float not null default 0, note text, " +
-	    "created_at timestamp not null default current_timestamp)";
+	    + "name varchar(100) not null, amount float not null, note text)";
     
     /**
      * SQL Column Keys
@@ -33,9 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME = "name";
     public static final String KEY_AMOUNT = "amount";
-    public static final String KEY_PAID = "paid";
     public static final String KEY_NOTE = "note";
-    public static final String KEY_CREATED_AT = "created_at";
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -70,8 +67,8 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	public Cursor getAllLoans() {
 		SQLiteDatabase db = getWritableDatabase();
-		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ") + SUM(" + KEY_PAID + ") as amount"};
-		Cursor c = db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, KEY_CREATED_AT + " desc");
+		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ") as amount"};
+		Cursor c = db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, null);
 		return c;
 	}
 	
@@ -100,9 +97,6 @@ public class DbHelper extends SQLiteOpenHelper {
 		
 		val.put(KEY_NAME, name);
 		if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
-		
-		Timestamp timestamp = new Timestamp(date.getTimeInMillis());
-		val.put(KEY_CREATED_AT, timestamp.toString());
 		
 		db.insert(DATABASE_TABLE, null, val);
 		db.close();
