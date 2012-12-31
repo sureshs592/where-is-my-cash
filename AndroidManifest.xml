@@ -24,6 +24,10 @@
             android:name="com.suresh.whereismycash.CreateActivity"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name="com.suresh.whereismycash.EditActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
     </application>
 
 </manifest>

@@ -25,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:text="240"
         android:textSize="24sp" />
 
     <ImageButton
@@ -43,7 +42,6 @@
         android:textColor="@color/text_grey"
         android:textSize="18sp"
         android:singleLine="true"
-        android:gravity="center_horizontal"
-        android:text="Lunch with a bunch of people"/>
+        android:gravity="center_horizontal" />
 
 </LinearLayout>

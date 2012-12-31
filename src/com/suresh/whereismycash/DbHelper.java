@@ -107,5 +107,24 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(DATABASE_TABLE, KEY_NAME + " = ?", new String[]{name});
 	}
-
+	
+	public float getLoanAmountByName(String name) {
+		float amount = 0f;
+		SQLiteDatabase db = getWritableDatabase();
+		String[] columns = {KEY_ID, "SUM(" + KEY_AMOUNT + ") as amount"};
+		Cursor c = db.query(DATABASE_TABLE, columns, KEY_NAME + " = ?", new String[]{name}, KEY_NAME, null, null);
+		if (c.moveToFirst()) {
+			amount = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
+		}
+		
+		return amount;
+	}
+	
+	public Cursor getLoansByName(String name) {
+		SQLiteDatabase db = getWritableDatabase();
+		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE};
+		Cursor c = db.query(DATABASE_TABLE, columns,  KEY_NAME + " = ?", new String[]{name},
+				null, null, null);
+		return c;
+	}
 }

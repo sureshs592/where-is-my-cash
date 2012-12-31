@@ -13,11 +13,11 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-public class MainActivity extends SherlockListActivity {
+public class MainActivity extends SherlockListActivity implements OnClickListener{
 	
 	private DbHelper dbHelper = new DbHelper(this);
 	private static final int ACTION_ADD_ENTRY = 1;
-	private MainAdapter adapter;
+	private static final int ACTION_EDIT_ENTRY = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class MainActivity extends SherlockListActivity {
     public void initializeList() {
     	Cursor c = dbHelper.getAllLoans();
         startManagingCursor(c);
-        adapter = new MainAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
+        MainAdapter adapter = new MainAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
         setListAdapter(adapter);
     }
 
@@ -52,15 +52,10 @@ public class MainActivity extends SherlockListActivity {
     }
     
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-    	int rowId = (Integer) v.getTag();
-    	
-    }
-    
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	switch (requestCode) {
     	case ACTION_ADD_ENTRY:
+    	case ACTION_EDIT_ENTRY:
     		if (resultCode == RESULT_OK) {
     			initializeList();
     		}
@@ -69,5 +64,13 @@ public class MainActivity extends SherlockListActivity {
     		super.onActivityResult(requestCode, resultCode, data);
     	}
     }
+
+	@Override
+	public void onClick(View v) {
+		String name = (String) v.getTag();
+    	Intent i = new Intent(this, EditActivity.class);
+    	i.putExtra("name", name);
+    	startActivityForResult(i, ACTION_EDIT_ENTRY);
+	}
     
 }

@@ -1,7 +1,6 @@
 package com.suresh.whereismycash;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -10,21 +9,21 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MainAdapter extends CursorAdapter implements OnClickListener {
+public class EditAdapter extends CursorAdapter implements OnClickListener {
 	
 	private DbHelper dbHelper;
-	private OnClickListener parentActivity;
+	private String name;
 
-	public MainAdapter(Context context, Cursor c, int flags, DbHelper dbHelper) {
+	public EditAdapter(String name, Context context, Cursor c, int flags, DbHelper dbHelper) {
 		super(context, c, flags);
-		parentActivity = (OnClickListener) context;
+		this.name = name;
 		this.dbHelper = dbHelper;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
-		view.setOnClickListener(parentActivity);
+		view.findViewById(R.id.btEdit).setOnClickListener(this);
 		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
 		int color = 0;
 		if (amount < 0) {
@@ -35,24 +34,27 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		} else if (amount > 0) {
 			color = R.color.amount_red;
 		}
-		String name = cursor.getString(cursor.getColumnIndex(DbHelper.KEY_NAME));
-		
-		TextView tvName = (TextView) view.findViewById(R.id.tvName);
-		tvName.setText(name);
 		
 		TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
 		tvAmount.setText(String.valueOf(amount));
 		tvAmount.setTextColor(context.getResources().getColor(color));
 		
-		view.findViewById(R.id.btDelete).setTag(name);
-		//int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
-		view.setTag(name);
+		String note = cursor.getString(cursor.getColumnIndex(DbHelper.KEY_NOTE));
+		TextView tvNote = (TextView) view.findViewById(R.id.tvNote);
+		if (note != null) {
+			tvNote.setText(note);
+		} else {
+			tvNote.setVisibility(View.GONE);
+		}
+		
+		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
+		view.setTag(id);
 	}
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(R.layout.main_list_item, null);
+		View v = inflater.inflate(R.layout.edit_list_item, null);
 		bindView(v, context, cursor);
 		return v;
 	}
@@ -62,7 +64,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btDelete:
 			dbHelper.delete((String)v.getTag());
-			swapCursor(dbHelper.getAllLoans());
+			swapCursor(dbHelper.getLoansByName(name));
 			break;
 		}
 	}
