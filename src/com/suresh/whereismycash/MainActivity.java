@@ -23,7 +23,11 @@ public class MainActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Cursor c = dbHelper.getAllLoans();
+        initializeList();
+    }
+    
+    public void initializeList() {
+    	Cursor c = dbHelper.getAllLoans();
         startManagingCursor(c);
         adapter = new MainAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
         setListAdapter(adapter);
@@ -58,7 +62,7 @@ public class MainActivity extends SherlockListActivity {
     	switch (requestCode) {
     	case ACTION_ADD_ENTRY:
     		if (resultCode == RESULT_OK) {
-    			recreate();
+    			initializeList();
     		}
     		break;
     	default:
