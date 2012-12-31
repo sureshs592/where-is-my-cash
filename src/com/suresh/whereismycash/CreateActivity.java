@@ -55,11 +55,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		String name = ((TextView) findViewById(R.id.autoEtName)).getText().toString();
 		String note = ((TextView) findViewById(R.id.etNote)).getText().toString();
 		
-		DatePicker picker = (DatePicker) findViewById(R.id.datePicker);
-		Calendar date = Calendar.getInstance();
-		date.set(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
-		
-		boolean result = dbHelper.addEntry(type, amount, name, note, date);
+		boolean result = dbHelper.addEntry(type, amount, name, note);
 		
 		String text = (result) ? "Entry added successfully" : "Failed to add entry" ;
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();

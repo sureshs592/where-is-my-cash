@@ -81,7 +81,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 	
 	public boolean addEntry(PaymentType type, float amount,
-			String name, String note, Calendar date) {
+			String name, String note) {
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues val = new ContentValues();
 		float storedAmount = (float) 0.0;

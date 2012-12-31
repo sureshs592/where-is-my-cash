@@ -58,13 +58,6 @@
             android:ems="10"
             android:hint="For what? (Optional)" />
 
-        <DatePicker
-            android:id="@+id/datePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:calendarViewShown="false"
-            android:spinnersShown="true" />
-
         <Button
             android:id="@+id/btAdd"
             android:layout_width="wrap_content"
