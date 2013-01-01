@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class EditAdapter extends CursorAdapter implements OnClickListener {
@@ -23,7 +24,6 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
-		view.findViewById(R.id.btEdit).setOnClickListener(this);
 		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
 		int color = 0;
 		if (amount < 0) {
@@ -52,7 +52,6 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
 		view.setTag(id);
 		view.findViewById(R.id.btDelete).setTag(id);
-		view.findViewById(R.id.btEdit).setTag(id);
 	}
 
 	@Override
@@ -70,7 +69,14 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 			int tag = (Integer)v.getTag();
 			dbHelper.delete(tag);
 			swapCursor(dbHelper.getLoansByName(name));
+			updateParentTotal(v);
 			break;
 		}
+	}
+	
+	public void updateParentTotal(View v) {
+		View grandParent = (View) v.getParent().getParent();
+		TextView tvTotal = (TextView) grandParent.findViewById(R.id.tvTotal);
+		
 	}
 }

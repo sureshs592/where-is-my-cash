@@ -4,44 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp" >
     
     <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        
-    <ImageButton
-        android:id="@+id/btEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:src="@drawable/content_edit" />
-
-    <TextView
-        android:id="@+id/tvAmount"
+        android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="24sp" />
-
+        android:orientation="vertical">
+    
+	    <TextView
+	        android:id="@+id/tvAmount"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:textSize="24sp" />
+	    
+	    <TextView
+	        android:id="@+id/tvNote" 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/text_grey"
+	        android:textSize="18sp"
+	        android:singleLine="true"
+	        android:gravity="center_horizontal" />
+	
+	    
+    </LinearLayout>
+    
     <ImageButton
         android:id="@+id/btDelete"
+        android:padding="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
         android:src="@drawable/content_discard" />
-    </LinearLayout>
-    
-    <TextView
-        android:id="@+id/tvNote" 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/text_grey"
-        android:textSize="18sp"
-        android:singleLine="true"
-        android:gravity="center_horizontal" />
 
 </LinearLayout>

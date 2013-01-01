@@ -132,4 +132,11 @@ public class DbHelper extends SQLiteOpenHelper {
 				null, null, null);
 		return c;
 	}
+	
+	public void updateLoad(int id, float amount) {
+		SQLiteDatabase db = getWritableDatabase();
+		ContentValues val = new ContentValues();
+		val.put(KEY_AMOUNT, amount);
+		db.update(DATABASE_TABLE, val, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+	}
 }
