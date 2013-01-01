@@ -108,6 +108,11 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.delete(DATABASE_TABLE, KEY_NAME + " = ?", new String[]{name});
 	}
 	
+	public void delete(int id) {
+		SQLiteDatabase db = getWritableDatabase();
+		db.delete(DATABASE_TABLE, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+	}
+	
 	public float getLoanAmountByName(String name) {
 		float amount = 0f;
 		SQLiteDatabase db = getWritableDatabase();

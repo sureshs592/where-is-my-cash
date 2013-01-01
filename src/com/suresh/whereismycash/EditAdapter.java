@@ -42,13 +42,17 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 		String note = cursor.getString(cursor.getColumnIndex(DbHelper.KEY_NOTE));
 		TextView tvNote = (TextView) view.findViewById(R.id.tvNote);
 		if (note != null) {
+			tvNote.setVisibility(View.VISIBLE);
 			tvNote.setText(note);
 		} else {
 			tvNote.setVisibility(View.GONE);
 		}
 		
+		//Setting tags
 		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
 		view.setTag(id);
+		view.findViewById(R.id.btDelete).setTag(id);
+		view.findViewById(R.id.btEdit).setTag(id);
 	}
 
 	@Override
@@ -63,10 +67,10 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btDelete:
-			dbHelper.delete((String)v.getTag());
+			int tag = (Integer)v.getTag();
+			dbHelper.delete(tag);
 			swapCursor(dbHelper.getLoansByName(name));
 			break;
 		}
 	}
-
 }
