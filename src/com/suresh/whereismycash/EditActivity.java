@@ -19,19 +19,8 @@ public class EditActivity extends SherlockListActivity {
 		name = getIntent().getStringExtra("name");
 		setTitle(name);
 		float amount = dbHelper.getLoanAmountByName(name);
-		int color = 0;
-		if (amount < 0) {
-			amount *= -1;
-			color = R.color.amount_green;
-		} else if (amount == 0) {
-			color = R.color.amount_blue;
-		} else if (amount > 0) {
-			color = R.color.amount_red;
-		}
 		TextView tvTotal = (TextView) findViewById(R.id.tvTotal);
-		tvTotal.setText(String.valueOf(amount));
-		tvTotal.setTextColor(this.getResources().getColor(color));
-		
+		DbHelper.setTextandColor(this, tvTotal, amount);
 		initializeList();
 	}
 	

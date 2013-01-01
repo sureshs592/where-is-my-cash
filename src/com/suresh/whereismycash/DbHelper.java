@@ -1,14 +1,12 @@
 package com.suresh.whereismycash;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.TextView;
 
 public class DbHelper extends SQLiteOpenHelper {
 	
@@ -138,5 +136,20 @@ public class DbHelper extends SQLiteOpenHelper {
 		ContentValues val = new ContentValues();
 		val.put(KEY_AMOUNT, amount);
 		db.update(DATABASE_TABLE, val, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+	}
+	
+	public static void setTextandColor(Context context, TextView tv, float amount) {
+		int color = 0;
+		if (amount < 0) {
+			amount *= -1;
+			color = R.color.amount_green;
+		} else if (amount == 0) {
+			color = R.color.amount_blue;
+		} else if (amount > 0) {
+			color = R.color.amount_red;
+		}
+		
+		tv.setText(String.valueOf(amount));
+		tv.setTextColor(context.getResources().getColor(color));
 	}
 }

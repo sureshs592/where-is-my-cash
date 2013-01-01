@@ -25,19 +25,8 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 	public void bindView(View view, Context context, Cursor cursor) {
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
-		int color = 0;
-		if (amount < 0) {
-			amount *= -1;
-			color = R.color.amount_green;
-		} else if (amount == 0) {
-			color = R.color.amount_blue;
-		} else if (amount > 0) {
-			color = R.color.amount_red;
-		}
-		
 		TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
-		tvAmount.setText(String.valueOf(amount));
-		tvAmount.setTextColor(context.getResources().getColor(color));
+		DbHelper.setTextandColor(context, tvAmount, amount);
 		
 		String note = cursor.getString(cursor.getColumnIndex(DbHelper.KEY_NOTE));
 		TextView tvNote = (TextView) view.findViewById(R.id.tvNote);
@@ -75,8 +64,9 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 	}
 	
 	public void updateParentTotal(View v) {
-		View grandParent = (View) v.getParent().getParent();
+		View grandParent = (View) v.getParent().getParent().getParent();
 		TextView tvTotal = (TextView) grandParent.findViewById(R.id.tvTotal);
-		
+		float amount = dbHelper.getLoanAmountByName(name);
+		DbHelper.setTextandColor(v.getContext(), tvTotal, amount);
 	}
 }
