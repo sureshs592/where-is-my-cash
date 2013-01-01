@@ -50,9 +50,21 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 				? DbHelper.PaymentType.GET : DbHelper.PaymentType.PAY;
 		
 		String inputAmount = ((TextView) findViewById(R.id.etAmount)).getText().toString();
-		float amount = Float.parseFloat(inputAmount);
+		float amount = 0f;
+		try {
+			amount = Float.parseFloat(inputAmount);	
+		} catch (NumberFormatException e) {
+			Toast.makeText(this, "Please enter an amount!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		
 		String name = ((TextView) findViewById(R.id.autoEtName)).getText().toString();
+		if (name == null || name.equals("")) {
+			Toast.makeText(this, "Please enter a name!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		String note = ((TextView) findViewById(R.id.etNote)).getText().toString();
 		
 		boolean result = dbHelper.addEntry(type, amount, name, note);
