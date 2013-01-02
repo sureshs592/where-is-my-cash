@@ -1,5 +1,7 @@
 package com.suresh.whereismycash;
 
+import com.suresh.whereismycash.DbHelper.PaymentType;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -53,8 +55,21 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		case R.id.btDelete:
 			dbHelper.delete((String)v.getTag());
 			swapCursor(dbHelper.getAllLoans());
+			updateParentTotal(v);
 			break;
 		}
+	}
+	
+	public void updateParentTotal(View v) {
+		View grandParent = (View) v.getParent().getParent().getParent();
+		
+		float getSum = dbHelper.getSumByType(PaymentType.GET);
+		TextView tvGetAmount = (TextView) grandParent.findViewById(R.id.tvGetAmount);
+		tvGetAmount.setText(String.valueOf(getSum));
+		
+		float paySum = dbHelper.getSumByType(PaymentType.PAY);
+		TextView tvPayAmount = (TextView) grandParent.findViewById(R.id.tvPayAmount);
+		tvPayAmount.setText(String.valueOf(paySum));
 	}
 
 }
