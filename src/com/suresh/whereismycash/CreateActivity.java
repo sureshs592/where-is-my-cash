@@ -30,6 +30,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create);
+		setTitle("Add Entry");
 		dbHelper = new DbHelper(this);
 		auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
 		String name = getIntent().getStringExtra("name");

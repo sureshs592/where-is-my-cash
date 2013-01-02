@@ -124,6 +124,29 @@ public class DbHelper extends SQLiteOpenHelper {
 		return amount;
 	}
 	
+	public float getSumByType(PaymentType type) {
+		float amount = 0f;
+		String sign = "";
+		switch (type) {
+		case GET:
+			sign = " < 0";
+			break;
+		case PAY:
+			sign = " > 0";
+			break;
+		}
+		SQLiteDatabase db = getWritableDatabase();
+		String[] columns = {KEY_ID, "SUM(" + KEY_AMOUNT + ") as amount"};
+		Cursor c = db.query(DATABASE_TABLE, columns, KEY_AMOUNT + sign, null, null, null, null);
+		if (c.moveToFirst()) {
+			amount = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
+			amount = (float) (Math.round(amount*100.0)/100.0);
+			if (amount < 0) amount *= -1;
+		}
+		
+		return amount;
+	}
+	
 	public Cursor getLoansByName(String name) {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE};

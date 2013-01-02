@@ -2,17 +2,16 @@ package com.suresh.whereismycash;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class MainActivity extends SherlockListActivity implements OnClickListener{
 	
@@ -75,6 +74,14 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 	protected void onResume() {
 		super.onResume();
 		initializeList();
+		
+		float getSum = dbHelper.getSumByType(PaymentType.GET);
+		TextView tvGetAmount = (TextView) findViewById(R.id.tvGetAmount);
+		tvGetAmount.setText(String.valueOf(getSum));
+		
+		float paySum = dbHelper.getSumByType(PaymentType.PAY);
+		TextView tvPayAmount = (TextView) findViewById(R.id.tvPayAmount);
+		tvPayAmount.setText(String.valueOf(paySum));
 	}
     
 }
