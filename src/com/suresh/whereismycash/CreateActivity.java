@@ -1,6 +1,5 @@
 package com.suresh.whereismycash;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
@@ -17,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class CreateActivity extends SherlockActivity implements

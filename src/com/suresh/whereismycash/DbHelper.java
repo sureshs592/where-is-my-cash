@@ -34,22 +34,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-//		initDummyData();
 	}
 	
-	private void initDummyData() {
-		SQLiteDatabase db = getWritableDatabase();
-		ContentValues val = new ContentValues();
-		val.put(KEY_NAME, "Subbu");
-		val.put(KEY_AMOUNT, -50);
-		db.insert(DATABASE_TABLE, null, val);
-		ContentValues val2 = new ContentValues();
-		val2.put(KEY_NAME, "Raji");
-		val2.put(KEY_AMOUNT, 150);
-		db.insert(DATABASE_TABLE, null, val2);
-		db.close();
-	}
-
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(DATABASE_CREATE);
