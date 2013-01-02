@@ -42,12 +42,7 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
     	case R.id.menu_add:
-//    		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-    			startActivityForResult(new Intent(this, CreateActivity.class), ACTION_ADD_ENTRY);	
-//    		} else {
-//    			CreateDialog dialog = new CreateDialog();
-//    			dialog.show(getFragmentManager(), "dialog");
-//    		}
+    		startActivityForResult(new Intent(this, CreateActivity.class), ACTION_ADD_ENTRY);
     		break;
     	default:
     		return super.onOptionsItemSelected(item);
