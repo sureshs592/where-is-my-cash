@@ -17,13 +17,11 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 	
 	private DbHelper dbHelper = new DbHelper(this);
 	private static final int ACTION_ADD_ENTRY = 1;
-	private static final int ACTION_EDIT_ENTRY = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initializeList();
     }
     
     public void initializeList() {
@@ -55,7 +53,6 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	switch (requestCode) {
     	case ACTION_ADD_ENTRY:
-    	case ACTION_EDIT_ENTRY:
     		if (resultCode == RESULT_OK) {
     			initializeList();
     		}
@@ -70,7 +67,13 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 		String name = (String) v.getTag();
     	Intent i = new Intent(this, EditActivity.class);
     	i.putExtra("name", name);
-    	startActivityForResult(i, ACTION_EDIT_ENTRY);
+    	startActivity(i);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		initializeList();
 	}
     
 }

@@ -4,33 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
     android:id="@+id/ltItem" >
 
-    <TextView
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:gravity="center_vertical" >
+        
+        <TextView
         android:id="@+id/tvAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:layout_marginRight="8dp" />
-
-    <TextView
+        android:minWidth="90dp"
+        android:textSize="26sp"
+        android:text="3000.0"
+        android:layout_marginRight="10dp" />
+        
+        <TextView
         android:id="@+id/tvName"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:maxLines="1"
-        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="sssssssss"
         android:textSize="20sp" />
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/btDelete"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_height="match_parent"
         android:src="@drawable/content_discard"
         android:background="@null"
+        android:paddingRight="16dp"
         android:contentDescription="@string/discard_button" />
 
 </LinearLayout>
