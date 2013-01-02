@@ -25,6 +25,7 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 	public void bindView(View view, Context context, Cursor cursor) {
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
+		amount = (float) (Math.round(amount*100.0)/100.0);
 		TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
 		DbHelper.setTextandColor(context, tvAmount, amount);
 		

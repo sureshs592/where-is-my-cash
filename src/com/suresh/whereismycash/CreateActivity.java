@@ -1,7 +1,6 @@
 package com.suresh.whereismycash;
 
-import java.util.Calendar;
-
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
@@ -11,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -19,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class CreateActivity extends SherlockActivity implements
@@ -32,13 +32,20 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		setContentView(R.layout.create);
 		dbHelper = new DbHelper(this);
 		auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-				this, android.R.layout.simple_list_item_1, null,
-				new String[]{DbHelper.KEY_NAME}, new int[]{android.R.id.text1},
-				CursorAdapter.FLAG_AUTO_REQUERY);
-		adapter.setFilterQueryProvider(this);
-		auto.setAdapter(adapter);
-		auto.setOnItemClickListener(this);
+		String name = getIntent().getStringExtra("name");
+		if (name == null) {
+			SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+					this, android.R.layout.simple_list_item_1, null,
+					new String[]{DbHelper.KEY_NAME}, new int[]{android.R.id.text1},
+					CursorAdapter.FLAG_AUTO_REQUERY);
+			adapter.setFilterQueryProvider(this);
+			auto.setAdapter(adapter);
+			auto.setOnItemClickListener(this);
+			auto.setEnabled(true);
+		} else {
+			auto.setText(name);
+			auto.setEnabled(false);
+		}
 		findViewById(R.id.btAdd).setOnClickListener(this);
 		((RadioGroup) findViewById(R.id.radioGroupType)).setOnCheckedChangeListener(this);
 	}

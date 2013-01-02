@@ -2,6 +2,7 @@ package com.suresh.whereismycash;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -41,7 +42,12 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
     	case R.id.menu_add:
-    		startActivityForResult(new Intent(this, CreateActivity.class), ACTION_ADD_ENTRY);
+//    		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+    			startActivityForResult(new Intent(this, CreateActivity.class), ACTION_ADD_ENTRY);	
+//    		} else {
+//    			CreateDialog dialog = new CreateDialog();
+//    			dialog.show(getFragmentManager(), "dialog");
+//    		}
     		break;
     	default:
     		return super.onOptionsItemSelected(item);

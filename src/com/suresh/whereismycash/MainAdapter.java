@@ -26,23 +26,14 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		view.setOnClickListener(parentActivity);
 		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
-		int color = 0;
-		if (amount < 0) {
-			amount *= -1;
-			color = R.color.amount_green;
-		} else if (amount == 0) {
-			color = R.color.amount_blue;
-		} else if (amount > 0) {
-			color = R.color.amount_red;
-		}
+		amount = (float) (Math.round(amount*100.0)/100.0);
 		String name = cursor.getString(cursor.getColumnIndex(DbHelper.KEY_NAME));
 		
 		TextView tvName = (TextView) view.findViewById(R.id.tvName);
 		tvName.setText(name);
 		
 		TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
-		tvAmount.setText(String.valueOf(amount));
-		tvAmount.setTextColor(context.getResources().getColor(color));
+		DbHelper.setTextandColor(context, tvAmount, amount);
 		
 		view.findViewById(R.id.btDelete).setTag(name);
 		//int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));

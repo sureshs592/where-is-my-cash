@@ -118,6 +118,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		Cursor c = db.query(DATABASE_TABLE, columns, KEY_NAME + " = ?", new String[]{name}, KEY_NAME, null, null);
 		if (c.moveToFirst()) {
 			amount = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
+			amount = (float) (Math.round(amount*100.0)/100.0);
 		}
 		
 		return amount;
