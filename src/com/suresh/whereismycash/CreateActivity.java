@@ -27,11 +27,11 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create);
-		setTitle("Add Entry");
 		dbHelper = new DbHelper(this);
 		auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
 		String name = getIntent().getStringExtra("name");
 		if (name == null) {
+			setTitle("Add Entry");
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter(
 					this, android.R.layout.simple_list_item_1, null,
 					new String[]{DbHelper.KEY_NAME}, new int[]{android.R.id.text1},
@@ -41,6 +41,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 			auto.setOnItemClickListener(this);
 			auto.setEnabled(true);
 		} else {
+			setTitle("Add Entry for " + name);
 			auto.setText(name);
 			auto.setEnabled(false);
 		}
