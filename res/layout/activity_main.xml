@@ -2,42 +2,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <LinearLayout
-        android:id="@+id/ltSummary"
-        android:layout_width="match_parent"
+    
+    <TextView
+        android:id="@+id/tvNetAmount"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingBottom="10dp" >
-        
-        <TextView
-            android:id="@+id/tvGetAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="34sp"
-            android:text="100.00"
-            android:textColor="@color/amount_green" />
-        
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/tvPayAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="34sp"
-            android:text="100.00"
-            android:textColor="@color/amount_red" />
-
-    </LinearLayout>
+        android:layout_centerHorizontal="true"
+        android:textSize="34sp" />
+    
+    <TextView 
+        android:id="@+id/tvNetLabel"
+        android:layout_below="@+id/tvNetAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+		android:layout_centerHorizontal="true"
+		android:text="Net"
+		android:textColor="@color/text_grey"
+		android:textSize="20sp" />
     
     <View 
             android:id="@+id/borderLine"
-            android:layout_below="@+id/ltSummary"
+            android:layout_below="@+id/tvNetLabel"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#d3d3d3" />

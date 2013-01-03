@@ -76,12 +76,10 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 		initializeList();
 		
 		float getSum = dbHelper.getSumByType(PaymentType.GET);
-		TextView tvGetAmount = (TextView) findViewById(R.id.tvGetAmount);
-		tvGetAmount.setText(String.valueOf(getSum));
-		
 		float paySum = dbHelper.getSumByType(PaymentType.PAY);
-		TextView tvPayAmount = (TextView) findViewById(R.id.tvPayAmount);
-		tvPayAmount.setText(String.valueOf(paySum));
+		float netSum = paySum - getSum;
+		TextView tvNetAmount = (TextView) findViewById(R.id.tvNetAmount);
+		DbHelper.setTextandColor(this, tvNetAmount, netSum);
 	}
     
 }
