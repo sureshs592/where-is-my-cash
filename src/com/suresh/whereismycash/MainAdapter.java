@@ -65,7 +65,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		
 		float getSum = dbHelper.getSumByType(PaymentType.GET);
 		float paySum = dbHelper.getSumByType(PaymentType.PAY);
-		float netSum = getSum + paySum;
+		float netSum = paySum - getSum;
 		TextView tvNetAmount = (TextView) grandParent.findViewById(R.id.tvNetAmount);
 		DbHelper.setTextandColor(grandParent.getContext(), tvNetAmount, netSum);
 	}
