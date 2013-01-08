@@ -1,8 +1,8 @@
 package com.suresh.whereismycash;
 
-import com.suresh.whereismycash.DbHelper.PaymentType;
-
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class MainAdapter extends CursorAdapter implements OnClickListener {
 	
@@ -53,11 +55,30 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btDelete:
-			dbHelper.delete((String)v.getTag());
-			swapCursor(dbHelper.getAllLoans());
-			updateParentTotal(v);
+			displayDialog(v);
 			break;
 		}
+	}
+	
+	public void displayDialog(final View v) {
+		View parent = (View) v.getParent();
+		TextView tvName = (TextView) parent.findViewById(R.id.tvName);
+		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+		builder.setMessage("Delete entry for " + tvName.getText() + "?");
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dbHelper.delete((String)v.getTag());
+				swapCursor(dbHelper.getAllLoans());
+				updateParentTotal(v);
+			}
+		});
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {}
+		});
+		builder.show();
 	}
 	
 	public void updateParentTotal(View v) {
