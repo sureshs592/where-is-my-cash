@@ -1,5 +1,6 @@
 package com.suresh.whereismycash;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
@@ -9,6 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -21,6 +24,7 @@ import com.suresh.whereismycash.DbHelper.PaymentType;
 public class CreateActivity extends SherlockActivity implements
 FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListener {
 	private DbHelper dbHelper;
+	private int entryId = 0;
 	private AutoCompleteTextView auto;
 	
 	@Override
@@ -29,7 +33,8 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		setContentView(R.layout.create);
 		dbHelper = new DbHelper(this);
 		auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
-		String name = getIntent().getStringExtra("name");
+		Intent i = getIntent();
+		String name = i.getStringExtra("name");
 		if (name == null) {
 			setTitle("Add Entry");
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter(
@@ -41,11 +46,33 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 			auto.setOnItemClickListener(this);
 			auto.setEnabled(true);
 		} else {
-			setTitle("Add Entry for " + name);
+			if (i.hasExtra("id")) {
+				entryId = i.getIntExtra("id", 0);
+				setTitle("Edit Entry for " + name);
+				
+				String paymentType = i.getStringExtra("paymentType");
+				RadioGroup radioType = (RadioGroup) findViewById(R.id.radioGroupType);
+				int checkedId = (paymentType.equals(PaymentType.GET.name()))
+						? R.id.radioGet : R.id.radioPay ;
+				radioType.check(checkedId);
+				
+				String amount = i.getStringExtra("amount");
+				EditText etAmount = (EditText) findViewById(R.id.etAmount);
+				etAmount.setText(amount);
+				
+				String note = i.getStringExtra("note");
+				EditText etNote = (EditText) findViewById(R.id.etNote);
+				etNote.setText(note);
+				
+				Button btAction = (Button) findViewById(R.id.btAction);
+				btAction.setText("Update");
+			} else {
+				setTitle("Add Entry for " + name);
+			}
 			auto.setText(name);
 			auto.setEnabled(false);
 		}
-		findViewById(R.id.btAdd).setOnClickListener(this);
+		findViewById(R.id.btAction).setOnClickListener(this);
 		((RadioGroup) findViewById(R.id.radioGroupType)).setOnCheckedChangeListener(this);
 	}
 	
@@ -81,11 +108,41 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		finish();
 	}
 	
+	public void update() {
+		RadioGroup radioType = (RadioGroup) findViewById(R.id.radioGroupType);
+		int checked = radioType.getCheckedRadioButtonId();
+		PaymentType type = (checked == R.id.radioGet)
+				? DbHelper.PaymentType.GET : DbHelper.PaymentType.PAY;
+		
+		String inputAmount = ((TextView) findViewById(R.id.etAmount)).getText().toString();
+		float amount = 0f;
+		try {
+			amount = Float.parseFloat(inputAmount);	
+		} catch (NumberFormatException e) {
+			Toast.makeText(this, "Please enter an amount!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		String note = ((TextView) findViewById(R.id.etNote)).getText().toString();
+		
+		boolean result = dbHelper.updateEntry(entryId, type, amount, note);
+		
+		String text = (result) ? "Entry updated successfully" : "Failed to update entry" ;
+		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		setResult(RESULT_OK);
+		finish();
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btAdd:
-			create();
+		case R.id.btAction:
+			String text = (String) ((Button)v).getText();
+			if (text.equals("Add Entry")) {
+				create();	
+			} else {
+				update();
+			}
 			break;
 		}
 	}

@@ -7,6 +7,14 @@
     android:orientation="horizontal"
     android:padding="8dp" >
     
+    <ImageButton
+        android:id="@+id/btEdit"
+        android:padding="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/content_edit" />
+    
     <LinearLayout 
         android:layout_weight="1"
         android:layout_width="0dp"

@@ -3,6 +3,7 @@ package com.suresh.whereismycash;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -24,7 +25,6 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
 		amount = (float) (Math.round(amount*100.0)/100.0);
 		TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
@@ -39,10 +39,13 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 			tvNote.setVisibility(View.GONE);
 		}
 		
-		//Setting tags
+		//Setting tags and click listeners
 		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
 		view.setTag(id);
 		view.findViewById(R.id.btDelete).setTag(id);
+		view.findViewById(R.id.btEdit).setTag(id);
+		view.findViewById(R.id.btDelete).setOnClickListener(this);
+		view.findViewById(R.id.btEdit).setOnClickListener(this);
 	}
 
 	@Override
@@ -58,6 +61,19 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btDelete:
 			displayDialog(v);
+			break;
+		case R.id.btEdit:
+			View parent = (View) v.getParent();
+			Intent i = new Intent(v.getContext(), CreateActivity.class);
+			i.putExtra("name", name);
+			int id = (Integer)v.getTag();
+			i.putExtra("id", id);
+			TextView tvAmount = (TextView) parent.findViewById(R.id.tvAmount);
+			i.putExtra("paymentType", (String)tvAmount.getTag());
+			i.putExtra("amount", (String)tvAmount.getText());
+			TextView tvNote = (TextView) parent.findViewById(R.id.tvNote);
+			i.putExtra("note", (String)tvNote.getText());
+			v.getContext().startActivity(i);
 			break;
 		}
 	}

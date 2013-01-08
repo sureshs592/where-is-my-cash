@@ -87,6 +87,27 @@ public class DbHelper extends SQLiteOpenHelper {
 		return true;
 	}
 	
+	public boolean updateEntry(int id, PaymentType type, float amount, String note) {
+		SQLiteDatabase db = getWritableDatabase();
+		ContentValues val = new ContentValues();
+		float storedAmount = (float) 0.0;
+		switch(type) {
+		case GET:
+			storedAmount = -1 * amount;
+			break;
+		case PAY:
+			storedAmount = amount;
+			break;
+		}
+		val.put(KEY_AMOUNT, storedAmount);
+		
+		if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
+		
+		db.update(DATABASE_TABLE, val, KEY_ID + " = ?", new String[] {String.valueOf(id)});
+		db.close();
+		return true;
+	}
+	
 	public void delete(String name) {
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(DATABASE_TABLE, KEY_NAME + " = ?", new String[]{name});
@@ -149,25 +170,22 @@ public class DbHelper extends SQLiteOpenHelper {
 		return c;
 	}
 	
-	public void updateLoad(int id, float amount) {
-		SQLiteDatabase db = getWritableDatabase();
-		ContentValues val = new ContentValues();
-		val.put(KEY_AMOUNT, amount);
-		db.update(DATABASE_TABLE, val, KEY_ID + " = ?", new String[]{String.valueOf(id)});
-	}
-	
 	public static void setTextandColor(Context context, TextView tv, float amount) {
 		int color = 0;
+		String tag = null;
 		if (amount < 0) {
 			amount *= -1;
 			color = R.color.amount_green;
+			tag = PaymentType.GET.name();
 		} else if (amount == 0) {
 			color = R.color.amount_blue;
 		} else if (amount > 0) {
 			color = R.color.amount_red;
+			tag = PaymentType.PAY.name();
 		}
 		
 		tv.setText(String.valueOf(amount));
 		tv.setTextColor(context.getResources().getColor(color));
+		tv.setTag(tag);
 	}
 }
