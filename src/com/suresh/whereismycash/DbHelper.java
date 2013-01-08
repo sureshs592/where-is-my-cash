@@ -101,7 +101,11 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 		val.put(KEY_AMOUNT, storedAmount);
 		
-		if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
+		if (note != null && !note.isEmpty()) {
+			val.put(KEY_NOTE, note);
+		} else {
+			val.putNull(KEY_NOTE);
+		}
 		
 		db.update(DATABASE_TABLE, val, KEY_ID + " = ?", new String[] {String.valueOf(id)});
 		db.close();
