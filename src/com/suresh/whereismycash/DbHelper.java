@@ -133,6 +133,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		return amount;
 	}
 	
+	public float getNetSum() {
+		float getSum = getSumByType(PaymentType.GET);
+		float paySum = getSumByType(PaymentType.PAY);
+		float netSum = paySum - getSum;
+		netSum = (float) (Math.round(netSum*100.0)/100.0);
+		return netSum;
+	}
+	
 	public Cursor getLoansByName(String name) {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE};

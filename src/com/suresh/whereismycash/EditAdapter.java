@@ -1,6 +1,8 @@
 package com.suresh.whereismycash;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -55,12 +57,31 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btDelete:
-			int tag = (Integer)v.getTag();
-			dbHelper.delete(tag);
-			swapCursor(dbHelper.getLoansByName(name));
-			updateParentTotal(v);
+			displayDialog(v);
 			break;
 		}
+	}
+	
+	public void displayDialog(final View v) {
+		View parent = (View) v.getParent();
+		TextView tvAmount = (TextView) parent.findViewById(R.id.tvAmount);
+		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+		builder.setMessage("Delete entry for " + tvAmount.getText() + "?");
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				int tag = (Integer)v.getTag();
+				dbHelper.delete(tag);
+				swapCursor(dbHelper.getLoansByName(name));
+				updateParentTotal(v);
+			}
+		});
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {}
+		});
+		builder.show();
 	}
 	
 	public void updateParentTotal(View v) {

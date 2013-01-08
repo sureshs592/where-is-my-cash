@@ -75,9 +75,7 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 		super.onResume();
 		initializeList();
 		
-		float getSum = dbHelper.getSumByType(PaymentType.GET);
-		float paySum = dbHelper.getSumByType(PaymentType.PAY);
-		float netSum = paySum - getSum;
+		float netSum = dbHelper.getNetSum();
 		TextView tvNetAmount = (TextView) findViewById(R.id.tvNetAmount);
 		DbHelper.setTextandColor(this, tvNetAmount, netSum);
 	}
