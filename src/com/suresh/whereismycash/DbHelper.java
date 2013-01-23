@@ -18,11 +18,15 @@ public class DbHelper extends SQLiteOpenHelper {
      * Database values and creation statement
      */
     private static final String DATABASE_NAME = "data";
-    private static final String DATABASE_TABLE = "loans";
-    private static final int DATABASE_VERSION = 2;
-    private static final String DATABASE_CREATE =
-	    "create table loans (_id integer primary key autoincrement, "
+    private static final String DATABASE_TABLE_LOANS = "loans";
+    private static final String DATABASE_TABLE_NAMES = "names";
+    private static final int DATABASE_VERSION = 3;
+    private static final String DATABASE_CREATE_LOANS =
+	    "create table if not exists loans (_id integer primary key autoincrement, "
 	    + "name varchar(100) not null, amount float not null, note text)";
+    private static final String DATABASE_CREATE_NAMES = 
+    	"create table if not exists names (_id integer primary key autoincrement, " +
+    	"name varchar(100) not null)";
     
     /**
      * SQL Column Keys
@@ -38,27 +42,27 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(DATABASE_CREATE);
+		db.execSQL(DATABASE_CREATE_LOANS);
+		db.execSQL(DATABASE_CREATE_NAMES);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
-        onCreate(db);
+                + newVersion);
+		db.execSQL(DATABASE_CREATE_NAMES);
 	}
 	
 	public Cursor getAllLoans() {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_NAME, "SUM(" + KEY_AMOUNT + ") as amount"};
-		Cursor c = db.query(DATABASE_TABLE, columns, null, null, KEY_NAME, null, null);
+		Cursor c = db.query(DATABASE_TABLE_LOANS, columns, null, null, KEY_NAME, null, null);
 		return c;
 	}
 	
 	public Cursor getMatchingNames(String input) {
 		SQLiteDatabase db = getWritableDatabase();
-		String query = "SELECT " + KEY_NAME + ", _id FROM " + DATABASE_TABLE +
+		String query = "SELECT " + KEY_NAME + ", _id FROM " + DATABASE_TABLE_LOANS +
 				" WHERE " + KEY_NAME + " LIKE ? GROUP BY " + KEY_NAME;
 		Cursor c = db.rawQuery(query, new String[]{input + "%"});
 		return c;
@@ -82,7 +86,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		val.put(KEY_NAME, name);
 		if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
 		
-		db.insert(DATABASE_TABLE, null, val);
+		db.insert(DATABASE_TABLE_LOANS, null, val);
 		db.close();
 		return true;
 	}
@@ -107,26 +111,26 @@ public class DbHelper extends SQLiteOpenHelper {
 			val.putNull(KEY_NOTE);
 		}
 		
-		db.update(DATABASE_TABLE, val, KEY_ID + " = ?", new String[] {String.valueOf(id)});
+		db.update(DATABASE_TABLE_LOANS, val, KEY_ID + " = ?", new String[] {String.valueOf(id)});
 		db.close();
 		return true;
 	}
 	
 	public void delete(String name) {
 		SQLiteDatabase db = getWritableDatabase();
-		db.delete(DATABASE_TABLE, KEY_NAME + " = ?", new String[]{name});
+		db.delete(DATABASE_TABLE_LOANS, KEY_NAME + " = ?", new String[]{name});
 	}
 	
 	public void delete(int id) {
 		SQLiteDatabase db = getWritableDatabase();
-		db.delete(DATABASE_TABLE, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+		db.delete(DATABASE_TABLE_LOANS, KEY_ID + " = ?", new String[]{String.valueOf(id)});
 	}
 	
 	public float getLoanAmountByName(String name) {
 		float amount = 0f;
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, "SUM(" + KEY_AMOUNT + ") as amount"};
-		Cursor c = db.query(DATABASE_TABLE, columns, KEY_NAME + " = ?", new String[]{name}, KEY_NAME, null, null);
+		Cursor c = db.query(DATABASE_TABLE_LOANS, columns, KEY_NAME + " = ?", new String[]{name}, KEY_NAME, null, null);
 		if (c.moveToFirst()) {
 			amount = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
 			amount = (float) (Math.round(amount*100.0)/100.0);
@@ -148,7 +152,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, "SUM(" + KEY_AMOUNT + ") as amount"};
-		Cursor c = db.query(DATABASE_TABLE, columns, KEY_AMOUNT + sign, null, null, null, null);
+		Cursor c = db.query(DATABASE_TABLE_LOANS, columns, KEY_AMOUNT + sign, null, null, null, null);
 		if (c.moveToFirst()) {
 			amount = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
 			amount = (float) (Math.round(amount*100.0)/100.0);
@@ -169,9 +173,34 @@ public class DbHelper extends SQLiteOpenHelper {
 	public Cursor getLoansByName(String name) {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE};
-		Cursor c = db.query(DATABASE_TABLE, columns,  KEY_NAME + " = ?", new String[]{name},
+		Cursor c = db.query(DATABASE_TABLE_LOANS, columns,  KEY_NAME + " = ?", new String[]{name},
 				null, null, null);
 		return c;
+	}
+	
+	public boolean addName(String name) {
+		if (checkNameExists(name)) {
+			return false;
+		}
+		
+		SQLiteDatabase db = getWritableDatabase();
+		ContentValues val = new ContentValues();
+		val.put(KEY_NAME, name);
+		db.insert(DATABASE_TABLE_NAMES, null, val);
+		db.close();
+		return true;
+	}
+	
+	public boolean checkNameExists(String name) {
+		SQLiteDatabase db = getReadableDatabase();
+		String[] columns = {KEY_ID, KEY_NAME};
+		Cursor c = db.query(DATABASE_TABLE_NAMES, columns, null, null, KEY_NAME, null, null);
+		
+		while (c.moveToNext()) {
+			String rowName = c.getString(c.getColumnIndex(KEY_NAME));
+			if (rowName.equals(name)) return true;
+		}
+		return false;
 	}
 	
 	public static void setTextandColor(Context context, TextView tv, float amount) {
