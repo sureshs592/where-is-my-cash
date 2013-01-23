@@ -51,6 +51,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion);
 		db.execSQL(DATABASE_CREATE_NAMES);
+		
+		//Importing names of existing entries
+		String[] columns = {KEY_ID, KEY_NAME};
+		Cursor c = db.query(DATABASE_TABLE_LOANS, columns, null, null, KEY_NAME, null, null);
+		ContentValues val = new ContentValues();
+		while (c.moveToNext()) {
+			val.put(KEY_NAME, c.getString(c.getColumnIndex(KEY_NAME)));
+			db.insert(DATABASE_TABLE_NAMES, null, val);
+		}
 	}
 	
 	public Cursor getAllLoans() {
@@ -62,7 +71,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	public Cursor getMatchingNames(String input) {
 		SQLiteDatabase db = getWritableDatabase();
-		String query = "SELECT " + KEY_NAME + ", _id FROM " + DATABASE_TABLE_LOANS +
+		String query = "SELECT " + KEY_NAME + ", _id FROM " + DATABASE_TABLE_NAMES +
 				" WHERE " + KEY_NAME + " LIKE ? GROUP BY " + KEY_NAME;
 		Cursor c = db.rawQuery(query, new String[]{input + "%"});
 		return c;
@@ -71,23 +80,34 @@ public class DbHelper extends SQLiteOpenHelper {
 	public boolean addEntry(PaymentType type, float amount,
 			String name, String note) {
 		SQLiteDatabase db = getWritableDatabase();
-		ContentValues val = new ContentValues();
-		float storedAmount = (float) 0.0;
-		switch(type) {
-		case GET:
-			storedAmount = -1 * amount;
-			break;
-		case PAY:
-			storedAmount = amount;
-			break;
+		db.beginTransaction();
+		try {
+			ContentValues val = new ContentValues();
+			float storedAmount = (float) 0.0;
+			switch(type) {
+			case GET:
+				storedAmount = -1 * amount;
+				break;
+			case PAY:
+				storedAmount = amount;
+				break;
+			}
+			val.put(KEY_AMOUNT, storedAmount);
+			
+			val.put(KEY_NAME, name);
+			addName(db, name);
+			if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
+			
+			db.insert(DATABASE_TABLE_LOANS, null, val);
+			db.setTransactionSuccessful();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			db.endTransaction();
+			db.close();
 		}
-		val.put(KEY_AMOUNT, storedAmount);
 		
-		val.put(KEY_NAME, name);
-		if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
-		
-		db.insert(DATABASE_TABLE_LOANS, null, val);
-		db.close();
 		return true;
 	}
 	
@@ -178,17 +198,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		return c;
 	}
 	
-	public boolean addName(String name) {
+	public void addName(SQLiteDatabase db, String name) {
 		if (checkNameExists(name)) {
-			return false;
+			return;
 		}
 		
-		SQLiteDatabase db = getWritableDatabase();
 		ContentValues val = new ContentValues();
 		val.put(KEY_NAME, name);
 		db.insert(DATABASE_TABLE_NAMES, null, val);
-		db.close();
-		return true;
 	}
 	
 	public boolean checkNameExists(String name) {
