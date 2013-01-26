@@ -1,8 +1,24 @@
 <resources>
 
+    <!-- GLOBAL -->
     <string name="app_name">Where\'s My Cash</string>
-    <string name="hello_world">Hello world!</string>
+    
+	<!-- MENU OPTIONS -->
     <string name="menu_add">Add</string>
-    <string name="title_activity_main">Where\'s My Cash</string>
+    
+    <!-- MAIN SCREEN -->
+    <string name="label_net">Net</string>
 
+    <!-- CREATE SCREEN -->
+    <string name="title_edit">Edit Entry for</string>
+    <string name="title_add_person">Add Entry for</string>
+    <string name="Get">Get</string>
+    <string name="Pay">Pay</string>
+    <string name="how_much_hint">How much?</string>
+    <string name="from_hint">From whom?</string>
+    <string name="to_hint">To whom?</string>
+    <string name="for_what_hint">For what? (Optional)</string>
+    <string name="btn_add">Add Entry</string>
+    <string name="btn_update">Update</string>
+    
 </resources>

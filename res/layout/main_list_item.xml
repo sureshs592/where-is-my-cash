@@ -37,7 +37,6 @@
         android:layout_height="match_parent"
         android:src="@drawable/content_discard"
         android:background="@null"
-        android:paddingRight="16dp"
-        android:contentDescription="@string/discard_button" />
+        android:paddingRight="16dp" />
 
 </LinearLayout>

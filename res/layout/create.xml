@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="How much?"
+            android:hint="@string/how_much_hint"
             android:inputType="numberDecimal" >
 
             <requestFocus />
@@ -58,14 +58,14 @@
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"
             android:ems="10"
-            android:hint="For what? (Optional)" />
+            android:hint="@string/for_what_hint" />
 
         <Button
             android:id="@+id/btAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
-            android:text="Add Entry" />
+            android:text="@string/btn_add" />
     </LinearLayout>
 
 </ScrollView>

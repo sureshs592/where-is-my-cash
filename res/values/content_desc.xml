@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="edit_button">Edit</string>
-    <string name="discard_button">Delete</string>
-    <string name="Get">Get</string>
-    <string name="Pay">Pay</string>
-    <string name="from_hint">From whom?</string>
-    <string name="to_hint">To whom?</string>
 </resources>

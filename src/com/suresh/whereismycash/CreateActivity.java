@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.suresh.whereismycash.DbHelper.PaymentType;
+import com.suresh.whereismycash.R.string;
 
 public class CreateActivity extends SherlockActivity implements
 FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListener {
@@ -36,7 +37,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		Intent i = getIntent();
 		String name = i.getStringExtra("name");
 		if (name == null) {
-			setTitle("Add Entry");
+			setTitle(getResources().getString(R.string.btn_add));
 			SimpleCursorAdapter adapter = new SimpleCursorAdapter(
 					this, android.R.layout.simple_list_item_1, null,
 					new String[]{DbHelper.KEY_NAME}, new int[]{android.R.id.text1},
@@ -48,7 +49,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		} else {
 			if (i.hasExtra("id")) {
 				entryId = i.getIntExtra("id", 0);
-				setTitle("Edit Entry for " + name);
+				setTitle(getResources().getString(R.string.title_edit) + " " + name);
 				
 				String paymentType = i.getStringExtra("paymentType");
 				RadioGroup radioType = (RadioGroup) findViewById(R.id.radioGroupType);
@@ -65,9 +66,9 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 				etNote.setText(note);
 				
 				Button btAction = (Button) findViewById(R.id.btAction);
-				btAction.setText("Update");
+				btAction.setText(getResources().getString(R.string.btn_update));
 			} else {
-				setTitle("Add Entry for " + name);
+				setTitle(getResources().getString(R.string.title_add_person) + " " + name);
 			}
 			auto.setText(name);
 			auto.setEnabled(false);
