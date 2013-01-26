@@ -88,14 +88,14 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		try {
 			amount = Float.parseFloat(inputAmount);	
 		} catch (NumberFormatException e) {
-			Toast.makeText(this, "Please enter an amount!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(R.string.error_amount), Toast.LENGTH_SHORT).show();
 			return;
 		}
 		
 		
 		String name = ((TextView) findViewById(R.id.autoEtName)).getText().toString();
 		if (name == null || name.equals("")) {
-			Toast.makeText(this, "Please enter a name!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(R.string.error_name), Toast.LENGTH_SHORT).show();
 			return;
 		}
 		
@@ -103,7 +103,8 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		
 		boolean result = dbHelper.addEntry(type, amount, name, note);
 		
-		String text = (result) ? "Entry added successfully" : "Failed to add entry" ;
+		String text = (result) ? getResources().getString(R.string.notify_success)
+				: getResources().getString(R.string.notify_fail) ;
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 		setResult(RESULT_OK);
 		finish();
@@ -120,7 +121,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		try {
 			amount = Float.parseFloat(inputAmount);	
 		} catch (NumberFormatException e) {
-			Toast.makeText(this, "Please enter an amount!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(R.string.error_amount), Toast.LENGTH_SHORT).show();
 			return;
 		}
 		
@@ -128,7 +129,8 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		
 		boolean result = dbHelper.updateEntry(entryId, type, amount, note);
 		
-		String text = (result) ? "Entry updated successfully" : "Failed to update entry" ;
+		String text = (result) ? getResources().getString(R.string.notify_success)
+				: getResources().getString(R.string.notify_fail);
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 		setResult(RESULT_OK);
 		finish();
@@ -139,7 +141,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		switch (v.getId()) {
 		case R.id.btAction:
 			String text = (String) ((Button)v).getText();
-			if (text.equals("Add Entry")) {
+			if (text.equals(getResources().getString(R.string.btn_add))) {
 				create();	
 			} else {
 				update();

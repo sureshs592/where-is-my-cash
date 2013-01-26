@@ -20,5 +20,9 @@
     <string name="for_what_hint">For what? (Optional)</string>
     <string name="btn_add">Add Entry</string>
     <string name="btn_update">Update</string>
+    <string name="error_amount">Please enter an amount!</string>
+    <string name="error_name">Please enter an name!</string>
+    <string name="notify_success">Entry added successfully</string>
+    <string name="notify_fail">Failed to add entry</string>
     
 </resources>
