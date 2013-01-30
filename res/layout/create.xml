@@ -50,6 +50,7 @@
             android:inputType="textCapWords"
             android:ems="10"
             android:hint="@string/from_hint"
+            android:textColor="@android:color/primary_text_light"
             android:completionThreshold="1" />
 
         <EditText

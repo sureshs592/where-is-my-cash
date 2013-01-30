@@ -2,9 +2,11 @@ package com.suresh.whereismycash;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,7 +22,6 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.suresh.whereismycash.DbHelper.PaymentType;
-import com.suresh.whereismycash.R.string;
 
 public class CreateActivity extends SherlockActivity implements
 FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListener {
@@ -161,6 +162,10 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		TextView tv = (TextView) view.findViewById(android.R.id.text1);
 		auto.setText(tv.getText());
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+			auto.dismissDropDown();
+			auto.clearFocus();
+		}
 	}
 
 	@Override
