@@ -1,0 +1,31 @@
+<resources>
+
+    <!-- GLOBAL -->
+    <string name="app_name">"Onde está o meu dinheiro"</string>
+    
+	<!-- MENU OPTIONS -->
+    <string name="menu_add">"Adicionar"</string>
+    
+    <!-- MAIN SCREEN -->
+    <string name="label_net">"Rede"</string>
+
+    <!-- CREATE SCREEN -->
+    <string name="title_edit">"Editar entrada para"</string>
+    <string name="title_add_person">"Adicionar Entrada para"</string>
+    <string name="Get">"Obter"</string>
+    <string name="Pay">"Pagar"</string>
+    <string name="how_much_hint">"Quanto?"</string>
+    <string name="from_hint">"De quem?"</string>
+    <string name="to_hint">"Para quem?"</string>
+    <string name="for_what_hint">"Para quê? (Opcional)"</string>
+    <string name="btn_add">"Adicionar entrada"</string>
+    <string name="btn_update">"Atualização"</string>
+    <string name="error_amount">"Por favor entre com um montante!"</string>
+    <string name="error_name">"Por favor digite um nome!"</string>
+    <string name="notify_success">"Entrada adicionada com sucesso"</string>
+    <string name="notify_fail">"Falha ao adicionar a entrada"</string>
+    
+    <!-- EDIT SCREEN -->
+    <string name="balance">"Balança:"</string>
+    
+</resources>
