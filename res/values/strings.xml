@@ -25,4 +25,7 @@
     <string name="notify_success">Entry added successfully</string>
     <string name="notify_fail">Failed to add entry</string>
     
+    <!-- EDIT SCREEN -->
+    <string name="balance">Balance:</string>
+    
 </resources>
