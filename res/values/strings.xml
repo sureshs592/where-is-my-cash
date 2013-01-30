@@ -12,8 +12,8 @@
     <!-- CREATE SCREEN -->
     <string name="title_edit">Edit Entry for</string>
     <string name="title_add_person">Add Entry for</string>
-    <string name="Get">Get</string>
-    <string name="Pay">Pay</string>
+    <string name="get">Get</string>
+    <string name="pay">Pay</string>
     <string name="how_much_hint">How much?</string>
     <string name="from_hint">From whom?</string>
     <string name="to_hint">To whom?</string>
