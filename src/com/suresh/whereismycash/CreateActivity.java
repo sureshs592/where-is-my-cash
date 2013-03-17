@@ -130,8 +130,8 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 		
 		boolean result = dbHelper.updateEntry(entryId, type, amount, note);
 		
-		String text = (result) ? getResources().getString(R.string.notify_success)
-				: getResources().getString(R.string.notify_fail);
+		String text = (result) ? getResources().getString(R.string.notify_update_success)
+				: getResources().getString(R.string.notify_update_fail);
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 		setResult(RESULT_OK);
 		finish();
