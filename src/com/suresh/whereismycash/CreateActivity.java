@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,7 +19,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class CreateActivity extends SherlockActivity implements
@@ -33,6 +34,9 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		dbHelper = new DbHelper(this);
 		auto = (AutoCompleteTextView) findViewById(R.id.autoEtName);
 		Intent i = getIntent();
@@ -180,5 +184,18 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 			break;
 		}
 		auto.setHint(id);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+    		finish();
+    		break;
+		default:
+			super.onOptionsItemSelected(item);
+		}
+		
+		return true;
 	}
 }

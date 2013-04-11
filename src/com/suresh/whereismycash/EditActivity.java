@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -21,6 +22,9 @@ public class EditActivity extends SherlockListActivity {
 		setContentView(R.layout.edit);
 		name = getIntent().getStringExtra("name");
 		setTitle(name);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 	
 	public void initializeList() {
@@ -43,6 +47,9 @@ public class EditActivity extends SherlockListActivity {
     		Intent i = new Intent(this, CreateActivity.class);
     		i.putExtra("name", name);
     		startActivity(i);
+    		break;
+    	case android.R.id.home:
+    		finish();
     		break;
     	default:
     		return super.onOptionsItemSelected(item);
