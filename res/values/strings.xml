@@ -18,6 +18,8 @@
     <string name="from_hint">From whom?</string>
     <string name="to_hint">To whom?</string>
     <string name="for_what_hint">For what? (Optional)</string>
+    <string name="date_today">Today</string>
+    <string name="date_other">Other</string>
     <string name="btn_add">Add Entry</string>
     <string name="btn_update">Update</string>
     <string name="error_amount">Please enter an amount!</string>
