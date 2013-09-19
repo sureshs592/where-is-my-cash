@@ -66,24 +66,30 @@
             android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
             android:id="@+id/ltDate" >
-
-            <RadioButton
-                android:id="@+id/radioDateToday"
+            
+            <RadioGroup
+                android:id="@+id/radioGroupDate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/date_today" />
+            	android:layout_height="wrap_content"
+            	android:orientation="vertical" >
+                
+                <RadioButton
+	                android:id="@+id/radioDateToday"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:checked="true"
+	                android:text="@string/date_today" />
 
-            <RadioButton
-                android:id="@+id/radioDateOther"
-                android:layout_below="@+id/radioDateToday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/date_other" />
+	            <RadioButton
+	                android:id="@+id/radioDateOther"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="@string/date_other" />
+            </RadioGroup>
 
             <TextView
                 android:id="@+id/tvChosenDate"
-                android:layout_toRightOf="@+id/radioDateToday"
+                android:layout_toRightOf="@+id/radioGroupDate"
 				android:layout_centerVertical="true"
                 android:layout_marginLeft="25dp"
                 android:layout_width="wrap_content"
