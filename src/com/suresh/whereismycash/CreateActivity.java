@@ -231,7 +231,10 @@ OnItemClickListener, OnCheckedChangeListener {
 			today.set(Calendar.DAY_OF_MONTH, dayOfMonth);	
 		}
 		DateFormat df = DateFormat.getDateInstance(); //Locale specific
-		((TextView) findViewById(R.id.tvChosenDate)).setText(df.format(today.getTime()));
+		((TextView) findViewById(R.id.tvChosenDate))
+			.setText(df.format(today.getTime()));
+		((TextView) findViewById(R.id.tvChosenDate))
+			.setTag(today.getTimeInMillis()); //Setting the actual time value in milliseconds
 	}
 	
 	@Override
