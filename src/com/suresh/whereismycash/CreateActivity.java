@@ -205,9 +205,6 @@ OnItemClickListener, OnCheckedChangeListener {
 			case R.id.radioDateToday:
 				resetDate();
 				break;
-//			case R.id.radioDateOther:
-//				triggerDateDialog();
-//				break;
 			}
 		}
 		

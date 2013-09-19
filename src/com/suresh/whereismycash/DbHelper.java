@@ -1,5 +1,7 @@
 package com.suresh.whereismycash;
 
+import java.util.Calendar;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,10 +22,10 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE_LOANS = "loans";
     private static final String DATABASE_TABLE_NAMES = "names";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_CREATE_LOANS =
 	    "create table if not exists loans (_id integer primary key autoincrement, "
-	    + "name varchar(100) not null, amount float not null, note text)";
+	    + "name varchar(100) not null, amount float not null, note text, date bigint not null)";
     private static final String DATABASE_CREATE_NAMES = 
     	"create table if not exists names (_id integer primary key autoincrement, " +
     	"name varchar(100) not null)";
@@ -35,6 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_NAME = "name";
     public static final String KEY_AMOUNT = "amount";
     public static final String KEY_NOTE = "note";
+    public static final String KEY_DATE = "date";
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,20 +49,18 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL(DATABASE_CREATE_NAMES);
 	}
 
+	/**
+	 * Upgrading from version 3 --> 4
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion);
-		db.execSQL(DATABASE_CREATE_NAMES);
 		
-		//Importing names of existing entries
-		String[] columns = {KEY_ID, KEY_NAME};
-		Cursor c = db.query(DATABASE_TABLE_LOANS, columns, null, null, KEY_NAME, null, null);
-		ContentValues val = new ContentValues();
-		while (c.moveToNext()) {
-			val.put(KEY_NAME, c.getString(c.getColumnIndex(KEY_NAME)));
-			db.insert(DATABASE_TABLE_NAMES, null, val);
-		}
+		db.execSQL("ALTER TABLE loans ADD COLUMN date bigint not null");
+		ContentValues values = new ContentValues();
+		values.put(KEY_DATE, Calendar.getInstance().getTimeInMillis());
+		db.update(DATABASE_CREATE_LOANS, values, null, null);
 	}
 	
 	public Cursor getAllLoans() {
@@ -78,7 +79,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 	
 	public boolean addEntry(PaymentType type, float amount,
-			String name, String note) {
+			String name, String note, long dateMillis) {
 		SQLiteDatabase db = getWritableDatabase();
 		db.beginTransaction();
 		try {
@@ -98,6 +99,8 @@ public class DbHelper extends SQLiteOpenHelper {
 			addName(db, name);
 			if (note != null && !note.isEmpty()) val.put(KEY_NOTE, note);
 			
+			val.put(KEY_DATE, dateMillis);
+			
 			db.insert(DATABASE_TABLE_LOANS, null, val);
 			db.setTransactionSuccessful();
 		} catch (Exception e) {
@@ -111,7 +114,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return true;
 	}
 	
-	public boolean updateEntry(int id, PaymentType type, float amount, String note) {
+	public boolean updateEntry(int id, PaymentType type, float amount, String note, long dateMillis) {
 		SQLiteDatabase db = getWritableDatabase();
 		ContentValues val = new ContentValues();
 		float storedAmount = (float) 0.0;
@@ -130,6 +133,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		} else {
 			val.putNull(KEY_NOTE);
 		}
+		
+		val.put(KEY_DATE, dateMillis);
 		
 		db.update(DATABASE_TABLE_LOANS, val, KEY_ID + " = ?", new String[] {String.valueOf(id)});
 		db.close();
