@@ -1,11 +1,16 @@
 package com.suresh.whereismycash;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,12 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
-public class CreateActivity extends SherlockActivity implements
+public class CreateActivity extends SherlockFragmentActivity implements
 FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListener {
+	private static final String TAG = "CreateActivity";
 	private DbHelper dbHelper;
 	private int entryId = 0;
 	private AutoCompleteTextView auto;
@@ -51,6 +57,7 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 			auto.setAdapter(adapter);
 			auto.setOnItemClickListener(this);
 			auto.setEnabled(true);
+			resetDate(); //Setting the date to today
 		} else {
 			if (i.hasExtra("id")) {
 				entryId = i.getIntExtra("id", 0);
@@ -74,12 +81,14 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 				btAction.setText(getResources().getString(R.string.btn_update));
 			} else {
 				setTitle(getResources().getString(R.string.title_add_person) + " " + name);
+				resetDate(); //Setting the date to today
 			}
 			auto.setText(name);
 			auto.setEnabled(false);
 		}
 		findViewById(R.id.btAction).setOnClickListener(this);
 		((RadioGroup) findViewById(R.id.radioGroupType)).setOnCheckedChangeListener(this);
+		((RadioGroup) findViewById(R.id.radioGroupDate)).setOnCheckedChangeListener(this);
 	}
 	
 	public void create() {
@@ -174,16 +183,40 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		int id = 0;
-		switch (checkedId) {
-		case R.id.radioGet:
-			id = R.string.from_hint;
-			break;
-		case R.id.radioPay:
-			id = R.string.to_hint;
-			break;
+		if (group.getId() == R.id.radioGroupType) {
+			int id = 0;
+			switch (checkedId) {
+			case R.id.radioGet:
+				id = R.string.from_hint;
+				break;
+			case R.id.radioPay:
+				id = R.string.to_hint;
+				break;
+			}
+			auto.setHint(id);
+		} else if (group.getId() == R.id.radioGroupDate) {
+			switch (checkedId) {
+			case R.id.radioDateToday:
+				resetDate();
+				break;
+			case R.id.radioDateOther:
+				triggerDateDialog();
+				break;
+			}
 		}
-		auto.setHint(id);
+		
+	}
+	
+	private void resetDate() {
+		Calendar today = Calendar.getInstance();
+		DateFormat df = DateFormat.getDateInstance(); //Locale specific
+		((TextView) findViewById(R.id.tvChosenDate)).setText(df.format(today.getTime()));
+	}
+	
+	private void triggerDateDialog() {
+		Log.v(TAG, "triggetDateDialog called");
+		DialogFragment dateFragment = new DatePickerFragment();
+	    dateFragment.show(getSupportFragmentManager(), "datePicker");
 	}
 	
 	@Override
