@@ -10,6 +10,10 @@ import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 public class DatePickerFragment extends DialogFragment implements OnDateSetListener{
+	
+	public DatePickerFragment() {
+		//Required
+	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,7 +30,7 @@ public class DatePickerFragment extends DialogFragment implements OnDateSetListe
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		// TODO Auto-generated method stub
-		
+		CreateActivity activity = (CreateActivity) getActivity();
+		activity.setDate(true, year, monthOfYear, dayOfMonth);
 	}
 }

@@ -30,7 +30,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class CreateActivity extends SherlockFragmentActivity implements
-FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListener {
+FilterQueryProvider, OnClickListener,
+OnItemClickListener, OnCheckedChangeListener {
 	private static final String TAG = "CreateActivity";
 	private DbHelper dbHelper;
 	private int entryId = 0;
@@ -86,7 +87,9 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 			auto.setText(name);
 			auto.setEnabled(false);
 		}
+		//Registering listeners
 		findViewById(R.id.btAction).setOnClickListener(this);
+		findViewById(R.id.radioDateOther).setOnClickListener(this);
 		((RadioGroup) findViewById(R.id.radioGroupType)).setOnCheckedChangeListener(this);
 		((RadioGroup) findViewById(R.id.radioGroupDate)).setOnCheckedChangeListener(this);
 	}
@@ -153,6 +156,9 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.radioDateOther:
+			triggerDateDialog();
+			break;
 		case R.id.btAction:
 			String text = (String) ((Button)v).getText();
 			if (text.equals(getResources().getString(R.string.btn_add))) {
@@ -199,24 +205,33 @@ FilterQueryProvider, OnClickListener, OnItemClickListener, OnCheckedChangeListen
 			case R.id.radioDateToday:
 				resetDate();
 				break;
-			case R.id.radioDateOther:
-				triggerDateDialog();
-				break;
+//			case R.id.radioDateOther:
+//				triggerDateDialog();
+//				break;
 			}
 		}
 		
 	}
 	
 	private void resetDate() {
-		Calendar today = Calendar.getInstance();
-		DateFormat df = DateFormat.getDateInstance(); //Locale specific
-		((TextView) findViewById(R.id.tvChosenDate)).setText(df.format(today.getTime()));
+		setDate(false, 0, 0, 0);
 	}
 	
 	private void triggerDateDialog() {
 		Log.v(TAG, "triggetDateDialog called");
 		DialogFragment dateFragment = new DatePickerFragment();
 	    dateFragment.show(getSupportFragmentManager(), "datePicker");
+	}
+	
+	public void setDate(boolean setSpecificTime, int year, int monthOfYear, int dayOfMonth) {
+		Calendar today = Calendar.getInstance();
+		if (setSpecificTime) {
+			today.set(Calendar.YEAR, year);
+			today.set(Calendar.MONTH, monthOfYear);
+			today.set(Calendar.DAY_OF_MONTH, dayOfMonth);	
+		}
+		DateFormat df = DateFormat.getDateInstance(); //Locale specific
+		((TextView) findViewById(R.id.tvChosenDate)).setText(df.format(today.getTime()));
 	}
 	
 	@Override
