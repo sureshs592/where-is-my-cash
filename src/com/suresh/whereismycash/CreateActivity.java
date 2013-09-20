@@ -118,7 +118,9 @@ OnItemClickListener, OnCheckedChangeListener {
 		
 		String note = ((TextView) findViewById(R.id.etNote)).getText().toString();
 		
-		boolean result = dbHelper.addEntry(type, amount, name, note);
+		long dateMillis = (Long) findViewById(R.id.tvChosenDate).getTag();
+		
+		boolean result = dbHelper.addEntry(type, amount, name, note, dateMillis);
 		
 		String text = (result) ? getResources().getString(R.string.notify_success)
 				: getResources().getString(R.string.notify_fail) ;
@@ -144,7 +146,9 @@ OnItemClickListener, OnCheckedChangeListener {
 		
 		String note = ((TextView) findViewById(R.id.etNote)).getText().toString();
 		
-		boolean result = dbHelper.updateEntry(entryId, type, amount, note);
+		long dateMillis = (Long) findViewById(R.id.tvChosenDate).getTag();
+		
+		boolean result = dbHelper.updateEntry(entryId, type, amount, note, dateMillis);
 		
 		String text = (result) ? getResources().getString(R.string.notify_update_success)
 				: getResources().getString(R.string.notify_update_fail);

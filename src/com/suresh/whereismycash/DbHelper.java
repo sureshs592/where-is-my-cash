@@ -57,10 +57,10 @@ public class DbHelper extends SQLiteOpenHelper {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion);
 		
-		db.execSQL("ALTER TABLE loans ADD COLUMN date bigint not null");
-		ContentValues values = new ContentValues();
-		values.put(KEY_DATE, Calendar.getInstance().getTimeInMillis());
-		db.update(DATABASE_CREATE_LOANS, values, null, null);
+		db.execSQL("ALTER TABLE loans ADD COLUMN date bigint not null default " + Calendar.getInstance().getTimeInMillis());
+//		ContentValues values = new ContentValues();
+//		values.put(KEY_DATE, Calendar.getInstance().getTimeInMillis());
+//		db.update(DATABASE_CREATE_LOANS, values, null, null);
 	}
 	
 	public Cursor getAllLoans() {
