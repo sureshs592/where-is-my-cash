@@ -21,13 +21,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/text_grey"
+	        android:textSize="18sp"
+	        android:gravity="center_horizontal"
+            android:text="20 Sep, 2013" />
     
 	    <TextView
 	        android:id="@+id/tvAmount"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center_horizontal"
-	        android:textSize="24sp" />
+	        android:textSize="24sp"
+	        android:text="100" />
 	    
 	    <TextView
 	        android:id="@+id/tvNote" 
@@ -36,7 +46,8 @@
 	        android:textColor="@color/text_grey"
 	        android:textSize="18sp"
 	        android:singleLine="true"
-	        android:gravity="center_horizontal" />
+	        android:gravity="center_horizontal"
+	        android:text="Testing" />
 	
 	    
     </LinearLayout>

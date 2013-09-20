@@ -197,7 +197,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	public Cursor getLoansByName(String name) {
 		SQLiteDatabase db = getWritableDatabase();
-		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE};
+		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE, KEY_DATE};
 		Cursor c = db.query(DATABASE_TABLE_LOANS, columns,  KEY_NAME + " = ?", new String[]{name},
 				null, null, null);
 		return c;

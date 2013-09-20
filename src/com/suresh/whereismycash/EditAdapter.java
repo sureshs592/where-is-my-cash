@@ -1,5 +1,8 @@
 package com.suresh.whereismycash;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +42,16 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 			tvNote.setVisibility(View.GONE);
 		}
 		
+		//Setting the date
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DbHelper.KEY_DATE)));
+		
+		DateFormat df = DateFormat.getDateInstance(); //Locale specific
+		((TextView) view.findViewById(R.id.tvDate))
+			.setText(df.format(cal.getTime()));
+		((TextView) view.findViewById(R.id.tvDate))
+			.setTag(cal.getTimeInMillis()); //Setting the actual time value in milliseconds
+		
 		//Setting tags and click listeners
 		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
 		view.setTag(id);
@@ -73,6 +86,7 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 			i.putExtra("amount", (String)tvAmount.getText());
 			TextView tvNote = (TextView) parent.findViewById(R.id.tvNote);
 			i.putExtra("note", (String)tvNote.getText());
+			i.putExtra("date", (Long) parent.findViewById(R.id.tvDate).getTag());
 			v.getContext().startActivity(i);
 			break;
 		}

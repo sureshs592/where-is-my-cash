@@ -79,6 +79,15 @@ OnItemClickListener, OnCheckedChangeListener {
 				
 				Button btAction = (Button) findViewById(R.id.btAction);
 				btAction.setText(getResources().getString(R.string.btn_update));
+				
+				//Setting the date information
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(i.getLongExtra("date", 0));
+				DateFormat df = DateFormat.getDateInstance(); //Locale specific
+				((TextView) findViewById(R.id.tvChosenDate))
+					.setText(df.format(cal.getTime()));
+				((TextView) findViewById(R.id.tvChosenDate))
+					.setTag(cal.getTimeInMillis()); //Setting the actual time value in milliseconds
 			} else {
 				setTitle(getResources().getString(R.string.title_add_person) + " " + name);
 				resetDate(); //Setting the date to today
