@@ -33,6 +33,7 @@
 
         <EditText
             android:id="@+id/etAmount"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -66,35 +67,25 @@
             android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
             android:id="@+id/ltDate" >
-            
-            <RadioGroup
-                android:id="@+id/radioGroupDate"
-                android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
-            	android:orientation="vertical" >
-                
-                <RadioButton
-	                android:id="@+id/radioDateToday"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:checked="true"
-	                android:text="@string/date_today" />
 
-	            <RadioButton
-	                android:id="@+id/radioDateOther"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="@string/date_other" />
-            </RadioGroup>
+			<ImageButton
+                android:id="@+id/btDateEdit"
+                android:padding="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/content_edit"
+                android:contentDescription="@string/contentDescEdit" />
 
             <TextView
                 android:id="@+id/tvChosenDate"
-                android:layout_toRightOf="@+id/radioGroupDate"
+                android:layout_toRightOf="@+id/btDateEdit"
 				android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="20 Sep, 2013" />
 
         </RelativeLayout>
 

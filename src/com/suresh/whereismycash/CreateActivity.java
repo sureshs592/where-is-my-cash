@@ -32,7 +32,6 @@ import com.suresh.whereismycash.DbHelper.PaymentType;
 public class CreateActivity extends SherlockFragmentActivity implements
 FilterQueryProvider, OnClickListener,
 OnItemClickListener, OnCheckedChangeListener {
-	private static final String TAG = "CreateActivity";
 	private DbHelper dbHelper;
 	private int entryId = 0;
 	private AutoCompleteTextView auto;
@@ -89,9 +88,8 @@ OnItemClickListener, OnCheckedChangeListener {
 		}
 		//Registering listeners
 		findViewById(R.id.btAction).setOnClickListener(this);
-		findViewById(R.id.radioDateOther).setOnClickListener(this);
+		findViewById(R.id.btDateEdit).setOnClickListener(this);
 		((RadioGroup) findViewById(R.id.radioGroupType)).setOnCheckedChangeListener(this);
-		((RadioGroup) findViewById(R.id.radioGroupDate)).setOnCheckedChangeListener(this);
 	}
 	
 	public void create() {
@@ -160,7 +158,7 @@ OnItemClickListener, OnCheckedChangeListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.radioDateOther:
+		case R.id.btDateEdit:
 			triggerDateDialog();
 			break;
 		case R.id.btAction:
@@ -193,25 +191,16 @@ OnItemClickListener, OnCheckedChangeListener {
 
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		if (group.getId() == R.id.radioGroupType) {
-			int id = 0;
-			switch (checkedId) {
-			case R.id.radioGet:
-				id = R.string.from_hint;
-				break;
-			case R.id.radioPay:
-				id = R.string.to_hint;
-				break;
-			}
-			auto.setHint(id);
-		} else if (group.getId() == R.id.radioGroupDate) {
-			switch (checkedId) {
-			case R.id.radioDateToday:
-				resetDate();
-				break;
-			}
+		int id = 0;
+		switch (checkedId) {
+		case R.id.radioGet:
+			id = R.string.from_hint;
+			break;
+		case R.id.radioPay:
+			id = R.string.to_hint;
+			break;
 		}
-		
+		auto.setHint(id);
 	}
 	
 	private void resetDate() {
@@ -219,7 +208,6 @@ OnItemClickListener, OnCheckedChangeListener {
 	}
 	
 	private void triggerDateDialog() {
-		Log.v(TAG, "triggetDateDialog called");
 		DialogFragment dateFragment = new DatePickerFragment();
 	    dateFragment.show(getSupportFragmentManager(), "datePicker");
 	}

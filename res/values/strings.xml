@@ -28,6 +28,8 @@
     <string name="notify_update_success">Entry updated successfully</string>
     <string name="notify_fail">Failed to add entry</string>
     <string name="notify_update_fail">Failed to update entry</string>
+    <string name="contentDescEdit">Edit</string>
+    <string name="contentDescDelete">Delete</string>
     
     <!-- EDIT SCREEN -->
     <string name="balance">Balance:</string>
