@@ -1,9 +1,10 @@
 package com.suresh.whereismycash;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -28,9 +29,8 @@ public class EditActivity extends SherlockListActivity {
 	}
 	
 	public void initializeList() {
-    	Cursor c = dbHelper.getLoansByName(name);
-        startManagingCursor(c);
-        EditAdapter adapter = new EditAdapter(name, this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
+    	LinkedList<HashMap<String, Object>> loans = dbHelper.getLoansByName(name);
+        NewEditAdapter adapter = new NewEditAdapter(loans, name, dbHelper);
         setListAdapter(adapter);
     }
 	
