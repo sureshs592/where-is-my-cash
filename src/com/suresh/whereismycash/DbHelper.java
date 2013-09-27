@@ -198,7 +198,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return netSum;
 	}
 	
-	public Cursor getCursorLoansByName(String name) {
+	public Cursor getLoansByName(String name) {
 		SQLiteDatabase db = getWritableDatabase();
 		String[] columns = {KEY_ID, KEY_AMOUNT, KEY_NOTE, KEY_DATE};
 		Cursor c = db.query(DATABASE_TABLE_LOANS, columns,  KEY_NAME + " = ?", new String[]{name},
@@ -206,15 +206,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		return c;
 	}
 	
-	public LinkedList<HashMap<String, Object>> getLoansByName(String name) {
-		Cursor c = getCursorLoansByName(name);
+	public LinkedList<HashMap<String, Object>> getLoansByNameList(String name) {
+		Cursor c = getLoansByName(name);
 		LinkedList<HashMap<String, Object>> list = new LinkedList<HashMap<String,Object>>();
 		
 		while (c.moveToNext()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			
+			map.put("viewType", NewEditAdapter.TYPE_ITEM);
 			map.put(KEY_ID, c.getInt(c.getColumnIndex(DbHelper.KEY_ID)));
-			map.put(KEY_NAME, c.getString(c.getColumnIndex(DbHelper.KEY_NAME)));
 			map.put(KEY_AMOUNT, c.getFloat(c.getColumnIndex(DbHelper.KEY_AMOUNT)));
 			map.put(KEY_NOTE, c.getString(c.getColumnIndex(DbHelper.KEY_NOTE)));
 			map.put(KEY_DATE, c.getString(c.getColumnIndex(DbHelper.KEY_DATE)));

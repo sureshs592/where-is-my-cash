@@ -29,8 +29,8 @@ public class EditActivity extends SherlockListActivity {
 	}
 	
 	public void initializeList() {
-    	LinkedList<HashMap<String, Object>> loans = dbHelper.getLoansByName(name);
-        NewEditAdapter adapter = new NewEditAdapter(loans, name, dbHelper);
+    	LinkedList<HashMap<String, Object>> loans = dbHelper.getLoansByNameList(name);
+        NewEditAdapter adapter = new NewEditAdapter(this, loans, name, dbHelper);
         setListAdapter(adapter);
     }
 	
