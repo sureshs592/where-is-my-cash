@@ -1,9 +1,9 @@
 package com.suresh.whereismycash;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -22,13 +22,13 @@ public class NewEditAdapter extends BaseAdapter implements OnClickListener {
     public static final int TYPE_SEPARATOR = 1;
     private static final int TYPE_MAX_COUNT = TYPE_SEPARATOR + 1;
 	
-	private LinkedList<HashMap<String, Object>> items;
+	private ArrayList<HashMap<String, Object>> items;
 	private Context context;
 	private LayoutInflater inflater;
 	private String name;
 	private DbHelper dbHelper;
 	
-	public NewEditAdapter(Context context, LinkedList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
+	public NewEditAdapter(Context context, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
 		this.context = context;
 		this.items = loans;
 		this.name = name;

@@ -1,7 +1,7 @@
 package com.suresh.whereismycash;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ public class EditActivity extends SherlockListActivity {
 	}
 	
 	public void initializeList() {
-    	LinkedList<HashMap<String, Object>> loans = dbHelper.getLoansByNameList(name);
+    	ArrayList<HashMap<String, Object>> loans = dbHelper.getLoansByNameList(name);
         NewEditAdapter adapter = new NewEditAdapter(this, loans, name, dbHelper);
         setListAdapter(adapter);
     }

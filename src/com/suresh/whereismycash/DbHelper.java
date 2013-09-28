@@ -3,7 +3,6 @@ package com.suresh.whereismycash;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -206,9 +205,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		return c;
 	}
 	
-	public LinkedList<HashMap<String, Object>> getLoansByNameList(String name) {
+	public ArrayList<HashMap<String, Object>> getLoansByNameList(String name) {
 		Cursor c = getLoansByName(name);
-		LinkedList<HashMap<String, Object>> list = new LinkedList<HashMap<String,Object>>();
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		
 		while (c.moveToNext()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
