@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_selector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
     android:id="@+id/ltItem" >
 
     <LinearLayout
@@ -19,7 +22,6 @@
         android:layout_height="wrap_content"
         android:minWidth="90dp"
         android:textSize="26sp"
-        android:text="3000.0"
         android:layout_marginRight="10dp" />
         
         <TextView
@@ -27,7 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:text="sssssssss"
         android:textSize="20sp" />
     </LinearLayout>
 
@@ -36,7 +37,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:src="@drawable/content_discard"
-        android:background="@null"
-        android:paddingRight="16dp" />
+        android:background="@drawable/bg_selector"
+        android:padding="4dp"
+        android:layout_marginRight="12dp"
+        android:contentDescription="@string/contentDescDelete" />
 
 </LinearLayout>
