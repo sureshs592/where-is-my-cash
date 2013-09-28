@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:orientation="vertical" >
 
     <TextView
@@ -10,15 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_grey"
-        android:paddingLeft="5dp"
-        android:paddingBottom="4dp"
+        android:padding="6dp"
         android:textStyle="bold"
         android:textSize="14sp" />
-
-    <View
-        android:id="@+id/sectionBorder"
-        android:layout_width="wrap_content"
-        android:layout_height="3dp"
-        android:background="@color/text_grey" />
 
 </LinearLayout>
