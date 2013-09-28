@@ -27,6 +27,11 @@
 			android:gravity="center_horizontal"
             android:textSize="30sp" />
     </LinearLayout>
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_grey"/>
 
     <ListView
         android:id="@android:id/list"
