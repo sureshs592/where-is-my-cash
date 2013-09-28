@@ -227,12 +227,10 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 	
 	public ArrayList<HashMap<String, Object>> getLoansByNameForDisplay(String name) {
-		Log.v(TAG, "Started display method");
 		ArrayList<HashMap<String, Object>> list = getLoansByNameAsList(name);
 
 		String prevFormat = "";
 		for (int i = 0; i < list.size(); i++) {
-			Log.v(TAG, "List[" + i + "]");
 			HashMap<String, Object> item = list.get(i);
 			String monthFormat = (String) DateFormat.format(
 					context.getString(R.string.section_header_format),
@@ -240,7 +238,6 @@ public class DbHelper extends SQLiteOpenHelper {
 			monthFormat = monthFormat.toUpperCase();
 			
 			if (!monthFormat.equals(prevFormat)) {
-				Log.v(TAG, "Adding header: " + monthFormat);
 				HashMap<String, Object> sectionItem = new HashMap<String, Object>();
 				sectionItem.put("viewType", NewEditAdapter.TYPE_SEPARATOR);
 				sectionItem.put("header", monthFormat);
@@ -249,7 +246,6 @@ public class DbHelper extends SQLiteOpenHelper {
 				i++;
 			}
 		}
-		Log.v(TAG, "Ended display method");
 		return list;
 	}
 	

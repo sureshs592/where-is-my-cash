@@ -1,6 +1,5 @@
 package com.suresh.whereismycash;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -105,10 +105,9 @@ public class NewEditAdapter extends BaseAdapter implements OnClickListener {
 		//Setting the date
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(Long.parseLong((String) map.get(DbHelper.KEY_DATE)));
-		
-		DateFormat df = DateFormat.getDateInstance(); //Locale specific
+
 		((TextView) view.findViewById(R.id.tvDate))
-			.setText(df.format(cal.getTime()));
+			.setText(DateFormat.format(context.getString(R.string.date_view_format), cal.getTime()));
 		((TextView) view.findViewById(R.id.tvDate))
 			.setTag(cal.getTimeInMillis()); //Setting the actual time value in milliseconds
 		
