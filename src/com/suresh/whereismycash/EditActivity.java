@@ -29,7 +29,7 @@ public class EditActivity extends SherlockListActivity {
 	}
 	
 	public void initializeList() {
-    	ArrayList<HashMap<String, Object>> loans = dbHelper.getLoansByNameList(name);
+    	ArrayList<HashMap<String, Object>> loans = dbHelper.getLoansByNameForDisplay(name);
         NewEditAdapter adapter = new NewEditAdapter(this, loans, name, dbHelper);
         setListAdapter(adapter);
     }

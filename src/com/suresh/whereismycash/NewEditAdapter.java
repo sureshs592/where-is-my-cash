@@ -78,6 +78,10 @@ public class NewEditAdapter extends BaseAdapter implements OnClickListener {
 	}
 	
 	private View generateSeparatorView(HashMap<String, Object> map, View view) {
+		if (view == null) view = inflater.inflate(R.layout.edit_list_section_header, null);
+		String header = (String) map.get("header");
+		TextView tvSectionName = (TextView) view.findViewById(R.id.tvSectionName);
+		tvSectionName.setText(header);
 		return view;
 	}
 	
@@ -95,6 +99,7 @@ public class NewEditAdapter extends BaseAdapter implements OnClickListener {
 			tvNote.setText(note);
 		} else {
 			tvNote.setVisibility(View.GONE);
+			tvNote.setText(null);
 		}
 		
 		//Setting the date
@@ -152,7 +157,7 @@ public class NewEditAdapter extends BaseAdapter implements OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				int tag = (Integer)v.getTag();
 				dbHelper.delete(tag);
-				items = dbHelper.getLoansByNameList(name);
+				items = dbHelper.getLoansByNameForDisplay(name);
 				notifyDataSetChanged();
 				updateParentTotal(v);
 			}

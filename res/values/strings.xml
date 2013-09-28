@@ -2,6 +2,7 @@
 
     <!-- GLOBAL -->
     <string name="app_name">Where\'s My Cash</string>
+    <string name="section_header_format">MMM yyyy</string>
     
 	<!-- MENU OPTIONS -->
     <string name="menu_add">Add</string>

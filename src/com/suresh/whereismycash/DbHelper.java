@@ -9,12 +9,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.TextView;
 
 public class DbHelper extends SQLiteOpenHelper {
 	
 	private static final String TAG = "DbHelper";
+	private Context context;
 	
 	public enum PaymentType { GET, PAY }
 	
@@ -43,6 +45,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
 	}
 	
 	@Override
@@ -205,7 +208,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return c;
 	}
 	
-	public ArrayList<HashMap<String, Object>> getLoansByNameList(String name) {
+	public ArrayList<HashMap<String, Object>> getLoansByNameAsList(String name) {
 		Cursor c = getLoansByName(name);
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		
@@ -220,6 +223,33 @@ public class DbHelper extends SQLiteOpenHelper {
 			list.add(map);
 		}
 		
+		return list;
+	}
+	
+	public ArrayList<HashMap<String, Object>> getLoansByNameForDisplay(String name) {
+		Log.v(TAG, "Started display method");
+		ArrayList<HashMap<String, Object>> list = getLoansByNameAsList(name);
+
+		String prevFormat = "";
+		for (int i = 0; i < list.size(); i++) {
+			Log.v(TAG, "List[" + i + "]");
+			HashMap<String, Object> item = list.get(i);
+			String monthFormat = (String) DateFormat.format(
+					context.getString(R.string.section_header_format),
+					Long.parseLong((String) item.get(KEY_DATE)));
+			monthFormat = monthFormat.toUpperCase();
+			
+			if (!monthFormat.equals(prevFormat)) {
+				Log.v(TAG, "Adding header: " + monthFormat);
+				HashMap<String, Object> sectionItem = new HashMap<String, Object>();
+				sectionItem.put("viewType", NewEditAdapter.TYPE_SEPARATOR);
+				sectionItem.put("header", monthFormat);
+				list.add(i, sectionItem);
+				prevFormat = monthFormat;
+				i++;
+			}
+		}
+		Log.v(TAG, "Ended display method");
 		return list;
 	}
 	
