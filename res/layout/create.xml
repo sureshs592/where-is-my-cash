@@ -84,8 +84,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="20 Sep, 2013" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </RelativeLayout>
 
