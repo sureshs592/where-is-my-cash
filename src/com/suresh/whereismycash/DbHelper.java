@@ -280,6 +280,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			tag = PaymentType.GET.name();
 		} else if (amount == 0) {
 			color = R.color.amount_blue;
+			tag = PaymentType.GET.name();
 		} else if (amount > 0) {
 			color = R.color.amount_red;
 			tag = PaymentType.PAY.name();
