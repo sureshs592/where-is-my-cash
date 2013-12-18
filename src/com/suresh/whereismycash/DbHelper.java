@@ -214,7 +214,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		
 		while (c.moveToNext()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("viewType", NewEditAdapter.TYPE_ITEM);
+			map.put("viewType", EditAdapter.TYPE_ITEM);
 			map.put(KEY_ID, c.getInt(c.getColumnIndex(DbHelper.KEY_ID)));
 			map.put(KEY_AMOUNT, c.getFloat(c.getColumnIndex(DbHelper.KEY_AMOUNT)));
 			map.put(KEY_NOTE, c.getString(c.getColumnIndex(DbHelper.KEY_NOTE)));
@@ -239,7 +239,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			
 			if (!monthFormat.equals(prevFormat)) {
 				HashMap<String, Object> sectionItem = new HashMap<String, Object>();
-				sectionItem.put("viewType", NewEditAdapter.TYPE_SEPARATOR);
+				sectionItem.put("viewType", EditAdapter.TYPE_SEPARATOR);
 				sectionItem.put("header", monthFormat);
 				list.add(i, sectionItem);
 				prevFormat = monthFormat;

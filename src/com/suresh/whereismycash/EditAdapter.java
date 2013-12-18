@@ -1,72 +1,125 @@
 package com.suresh.whereismycash;
 
-import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class EditAdapter extends CursorAdapter implements OnClickListener {
+public class EditAdapter extends BaseAdapter implements OnClickListener {
 	
-	private DbHelper dbHelper;
+	public static final int TYPE_ITEM = 0;
+    public static final int TYPE_SEPARATOR = 1;
+    private static final int TYPE_MAX_COUNT = TYPE_SEPARATOR + 1;
+	
+	private ArrayList<HashMap<String, Object>> items;
+	private Context context;
+	private LayoutInflater inflater;
 	private String name;
-
-	public EditAdapter(String name, Context context, Cursor c, int flags, DbHelper dbHelper) {
-		super(context, c, flags);
+	private DbHelper dbHelper;
+	
+	public EditAdapter(Context context, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
+		this.context = context;
+		this.items = loans;
 		this.name = name;
 		this.dbHelper = dbHelper;
+		this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
-	public void bindView(View view, Context context, Cursor cursor) {
-		float amount = cursor.getFloat(cursor.getColumnIndex(DbHelper.KEY_AMOUNT));
+	public int getCount() {
+		return items.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return items.get(position);
+	}
+	
+	@Override
+	public int getItemViewType(int position) {
+		return (Integer) items.get(position).get("viewType");
+	}
+	
+	@Override
+	public int getViewTypeCount() {
+		return TYPE_MAX_COUNT;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		HashMap<String, Object> map = items.get(position);
+		
+		switch ((Integer) map.get("viewType")) {
+		case TYPE_ITEM:
+			convertView = generateItemView(map, convertView);
+			break;
+		case TYPE_SEPARATOR:
+			convertView = generateSeparatorView(map, convertView);
+			break;
+		}
+		
+		return convertView;
+	}
+	
+	private View generateSeparatorView(HashMap<String, Object> map, View view) {
+		if (view == null) view = inflater.inflate(R.layout.edit_list_section_header, null);
+		String header = (String) map.get("header");
+		TextView tvSectionName = (TextView) view.findViewById(R.id.tvSectionName);
+		tvSectionName.setText(header);
+		return view;
+	}
+	
+	private View generateItemView(HashMap<String, Object> map, View view) {
+		if (view == null) view = inflater.inflate(R.layout.edit_list_item, null); 
+		float amount = (Float) map.get(DbHelper.KEY_AMOUNT);
 		amount = (float) (Math.round(amount*100.0)/100.0);
 		TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
 		DbHelper.setTextandColor(context, tvAmount, amount);
 		
-		String note = cursor.getString(cursor.getColumnIndex(DbHelper.KEY_NOTE));
+		String note = (String) map.get(DbHelper.KEY_NOTE);
 		TextView tvNote = (TextView) view.findViewById(R.id.tvNote);
 		if (note != null) {
 			tvNote.setVisibility(View.VISIBLE);
 			tvNote.setText(note);
 		} else {
 			tvNote.setVisibility(View.GONE);
+			tvNote.setText(null);
 		}
 		
 		//Setting the date
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DbHelper.KEY_DATE)));
-		
-		DateFormat df = DateFormat.getDateInstance(); //Locale specific
+		cal.setTimeInMillis(Long.parseLong((String) map.get(DbHelper.KEY_DATE)));
+
 		((TextView) view.findViewById(R.id.tvDate))
-			.setText(df.format(cal.getTime()));
+			.setText(DateFormat.format(context.getString(R.string.date_view_format), cal.getTime()));
 		((TextView) view.findViewById(R.id.tvDate))
 			.setTag(cal.getTimeInMillis()); //Setting the actual time value in milliseconds
 		
 		//Setting tags and click listeners
-		int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
+		int id = (Integer) map.get(DbHelper.KEY_ID);
 		view.setTag(id);
 		view.findViewById(R.id.btDelete).setTag(id);
 		view.findViewById(R.id.btEdit).setTag(id);
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		view.findViewById(R.id.btEdit).setOnClickListener(this);
-	}
-
-	@Override
-	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(R.layout.edit_list_item, null);
-		bindView(v, context, cursor);
-		return v;
+		
+		return view;
 	}
 	
 	@Override
@@ -103,7 +156,8 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				int tag = (Integer)v.getTag();
 				dbHelper.delete(tag);
-				swapCursor(dbHelper.getLoansByName(name));
+				items = dbHelper.getLoansByNameForDisplay(name);
+				notifyDataSetChanged();
 				updateParentTotal(v);
 			}
 		});
@@ -120,4 +174,5 @@ public class EditAdapter extends CursorAdapter implements OnClickListener {
 		float amount = dbHelper.getLoanAmountByName(name);
 		DbHelper.setTextandColor(v.getContext(), tvTotal, amount);
 	}
+
 }
