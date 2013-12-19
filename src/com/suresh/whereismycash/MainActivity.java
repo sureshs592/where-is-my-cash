@@ -27,7 +27,7 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
     public void initializeList() {
     	Cursor c = dbHelper.getAllLoans();
         startManagingCursor(c);
-        MainAdapter adapter = new MainAdapter(this, c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
+        MainAdapter adapter = new MainAdapter(this, getListView(), c, CursorAdapter.FLAG_AUTO_REQUERY, dbHelper);
         setListAdapter(adapter);
     }
 
