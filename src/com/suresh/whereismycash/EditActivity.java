@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -30,7 +32,7 @@ public class EditActivity extends SherlockListActivity {
 	
 	public void initializeList() {
     	ArrayList<HashMap<String, Object>> loans = dbHelper.getLoansByNameForDisplay(name);
-        EditAdapter adapter = new EditAdapter(this, loans, name, dbHelper);
+        EditAdapter adapter = new EditAdapter(this, getListView(), loans, name, dbHelper);
         setListAdapter(adapter);
     }
 	
