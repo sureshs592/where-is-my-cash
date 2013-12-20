@@ -47,6 +47,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		view.findViewById(R.id.btDelete).setTag(name);
 		//int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
 		view.setTag(cursor.getPosition());
+		if (MiscUtil.sdkAboveHoneycomb()) view.setOnTouchListener(new SwipeListener(listView, this.context));
 	}
 
 	@Override
