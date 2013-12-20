@@ -15,13 +15,11 @@ public class SwipeListener implements OnTouchListener {
 	private String TAG = "SwipeListener";
 	private float startPosition = 0;
 	private ListView lv;
-	private Context context;
 	private float swipeSlop = -1;
 	private boolean swiping = false;
 	
 	public SwipeListener(ListView lv, Context context) {
 		this.lv = lv;
-		this.context = context;
 		swipeSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 	}
 
