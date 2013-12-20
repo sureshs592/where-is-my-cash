@@ -18,6 +18,8 @@ public class SwipeListener implements OnTouchListener {
 	private float swipeSlop = -1;
 	private boolean swiping = false;
 	
+	private final int SWIPE_DURATION = 250;
+	
 	public SwipeListener(ListView lv, Context context) {
 		this.lv = lv;
 		swipeSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -25,6 +27,9 @@ public class SwipeListener implements OnTouchListener {
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
+		float deltaX = event.getX() + v.getTranslationX() - startPosition;
+		float deltaXAbs = Math.abs(deltaX);
+		float alpha = 1 - (deltaXAbs / v.getWidth());
 		
 		switch(event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
@@ -32,10 +37,6 @@ public class SwipeListener implements OnTouchListener {
 			startPosition = event.getX();
 			break;
 		case MotionEvent.ACTION_MOVE:
-			float deltaX = event.getX() + v.getTranslationX() - startPosition;
-			float deltaXAbs = Math.abs(deltaX);
-			float alpha = 1 - (deltaXAbs / v.getWidth());
-			
 			if (deltaXAbs > swipeSlop) { //Yes. The user is swiping for sure!
 				swiping = true;
 				lv.requestDisallowInterceptTouchEvent(true);
@@ -51,8 +52,9 @@ public class SwipeListener implements OnTouchListener {
 			break;
 		case MotionEvent.ACTION_UP:
 			Log.v(TAG, "ACTION_UP");
-			v.setTranslationX(0);
-			v.setAlpha(1);
+			long duration = (int) ((1 - alpha) * SWIPE_DURATION);
+			v.animate().setDuration(duration).
+            alpha(1).translationX(0);
 			swiping = false;
 			break;
 		}
