@@ -18,7 +18,7 @@ public class SwipeListener implements OnTouchListener {
 	private float swipeSlop = -1;
 	private boolean swiping = false;
 	
-	private final int SWIPE_DURATION = 250;
+	private final int SWIPE_DURATION = 350;
 	
 	public SwipeListener(ListView lv, Context context) {
 		this.lv = lv;
@@ -52,10 +52,15 @@ public class SwipeListener implements OnTouchListener {
 			break;
 		case MotionEvent.ACTION_UP:
 			Log.v(TAG, "ACTION_UP");
-			long duration = (int) ((1 - alpha) * SWIPE_DURATION);
-			v.animate().setDuration(duration).
-            alpha(1).translationX(0);
-			swiping = false;
+			
+			if (!swiping) {
+				v.performClick();
+			} else {
+				long duration = (int) ((1 - alpha) * SWIPE_DURATION);
+				v.animate().setDuration(duration).alpha(1).translationX(0);
+				swiping = false;
+			}
+
 			break;
 		}
 		
