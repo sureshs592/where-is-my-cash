@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class EditAdapter extends BaseAdapter implements OnClickListener {
+import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
+
+public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteRowListener {
 	
 	public static final int TYPE_ITEM = 0;
     public static final int TYPE_SEPARATOR = 1;
@@ -24,12 +27,14 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 	
 	private ArrayList<HashMap<String, Object>> items;
 	private Context context;
+	private ListView listView;
 	private LayoutInflater inflater;
 	private String name;
 	private DbHelper dbHelper;
 	
-	public EditAdapter(Context context, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
+	public EditAdapter(Context context, ListView listView, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
 		this.context = context;
+		this.listView = listView;
 		this.items = loans;
 		this.name = name;
 		this.dbHelper = dbHelper;
@@ -119,6 +124,8 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		view.findViewById(R.id.btEdit).setOnClickListener(this);
 		
+		view.setOnTouchListener(new SwipeListener(listView, context, this));
+		
 		return view;
 	}
 	
@@ -154,11 +161,7 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				int tag = (Integer)v.getTag();
-				dbHelper.delete(tag);
-				items = dbHelper.getLoansByNameForDisplay(name);
-				notifyDataSetChanged();
-				updateParentTotal(v);
+				deleteRow(v);
 			}
 		});
 		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -173,6 +176,15 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 		TextView tvTotal = (TextView) grandParent.findViewById(R.id.tvTotal);
 		float amount = dbHelper.getLoanAmountByName(name);
 		DbHelper.setTextandColor(v.getContext(), tvTotal, amount);
+	}
+
+	@Override
+	public void deleteRow(View v) {
+		int tag = (Integer)v.getTag();
+		dbHelper.delete(tag);
+		items = dbHelper.getLoansByNameForDisplay(name);
+		notifyDataSetChanged();
+		updateParentTotal(v);	
 	}
 
 }
