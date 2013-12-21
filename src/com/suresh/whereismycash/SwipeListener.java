@@ -18,7 +18,8 @@ public class SwipeListener implements OnTouchListener {
 	private float swipeSlop = -1;
 	private boolean swiping = false;
 	
-	private final int SWIPE_DURATION = 350;
+	private final int SWIPE_DURATION = 300;
+	private final double ACTION_THRESHOLD = 0.25;
 	
 	public SwipeListener(ListView lv, Context context) {
 		this.lv = lv;
@@ -29,7 +30,8 @@ public class SwipeListener implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		float deltaX = event.getX() + v.getTranslationX() - startPosition;
 		float deltaXAbs = Math.abs(deltaX);
-		float alpha = 1 - (deltaXAbs / v.getWidth());
+		float fractionCovered = deltaXAbs / v.getWidth(); 
+		float alpha = 1 - fractionCovered;
 		
 		switch(event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
@@ -56,8 +58,23 @@ public class SwipeListener implements OnTouchListener {
 			if (!swiping) {
 				v.performClick();
 			} else {
-				long duration = (int) ((1 - alpha) * SWIPE_DURATION);
-				v.animate().setDuration(duration).alpha(1).translationX(0);
+				float endX; //End position of the row. Left or right of screen.
+				float endAlpha;
+				boolean remove;
+				long animDuration;
+				
+				if (fractionCovered > ACTION_THRESHOLD) { //Delete the row
+					animDuration = (long) ((1 - fractionCovered) * SWIPE_DURATION);
+					endX = deltaX > 0 ? v.getWidth() : -v.getWidth(); //Swipe left or right
+					endAlpha = 0; //Transparent
+					remove = true;
+				} else { //Snap back into place
+					animDuration = (long) (fractionCovered * SWIPE_DURATION);
+					endX = 0;
+					endAlpha = 1;
+					remove = false;
+				}
+				v.animate().setDuration(animDuration).alpha(endAlpha).translationX(endX);
 				swiping = false;
 			}
 
