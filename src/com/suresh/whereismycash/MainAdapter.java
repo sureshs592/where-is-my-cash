@@ -1,5 +1,7 @@
 package com.suresh.whereismycash;
 
+import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MainAdapter extends CursorAdapter implements OnClickListener {
+public class MainAdapter extends CursorAdapter implements OnClickListener, DeleteRowListener {
 	
 	private DbHelper dbHelper;
 	private Context context;
@@ -44,7 +46,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		view.findViewById(R.id.btDelete).setTag(name);
 		//int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
 		view.setTag(name);
-		if (MiscUtil.phoneSupportsSwipe()) view.setOnTouchListener(new SwipeListener(listView, this.context));
+		if (MiscUtil.phoneSupportsSwipe()) view.setOnTouchListener(new SwipeListener(listView, this.context, this));
 	}
 
 	@Override
@@ -73,9 +75,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				dbHelper.delete((String)v.getTag());
-				swapCursor(dbHelper.getAllLoans());
-				updateParentTotal(v);
+				deleteRow(v);
 			}
 		});
 		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -91,6 +91,12 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		float netSum = dbHelper.getNetSum();
 		TextView tvNetAmount = (TextView) grandParent.findViewById(R.id.tvNetAmount);
 		DbHelper.setTextandColor(grandParent.getContext(), tvNetAmount, netSum);
+	}
+
+	@Override public void deleteRow(View v) {
+		dbHelper.delete((String)v.getTag());
+		swapCursor(dbHelper.getAllLoans());
+		updateParentTotal(v);
 	}
 
 }
