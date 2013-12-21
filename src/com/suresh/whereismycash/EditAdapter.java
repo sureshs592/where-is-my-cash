@@ -182,15 +182,18 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 
 	@Override
 	public void deleteRow(View v) {
+		if (v.getId() == R.id.btDelete) v = (View) v.getParent();
+		TextView tvAmount = (TextView) v.findViewById(R.id.tvAmount);
+		String amount = (String) tvAmount.getText();
+		String paymentType = (String) tvAmount.getTag();
+		
 		int tag = (Integer)v.getTag();
 		dbHelper.delete(tag);
 		items = dbHelper.getLoansByNameForDisplay(name);
 		notifyDataSetChanged();
 		updateParentTotal(v);
 		
-		TextView tvAmount = (TextView) v.findViewById(R.id.tvAmount);
-		String amount = (String) tvAmount.getText();
-		String paymentType = (String) tvAmount.getTag();
+		
 		
 		String toastMsg = "Deleted entry to" + ((paymentType.equals(PaymentType.GET.toString())) ? " get " : " pay " ) + amount;
 		Toast.makeText(context, (CharSequence) toastMsg, Toast.LENGTH_SHORT).show();
