@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.suresh.whereismycash.DbHelper.PaymentType;
 
 public class MainActivity extends SherlockListActivity implements OnClickListener{
 	

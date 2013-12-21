@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,7 +43,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		
 		view.findViewById(R.id.btDelete).setTag(name);
 		//int id = cursor.getInt(cursor.getColumnIndex(DbHelper.KEY_ID));
-		view.setTag(cursor.getPosition());
+		view.setTag(name);
 		if (MiscUtil.phoneSupportsSwipe()) view.setOnTouchListener(new SwipeListener(listView, this.context));
 	}
 
@@ -67,23 +64,24 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		}
 	}
 	
-	public void displayDialog(final View btDelete) {
-		final View parent = (View) btDelete.getParent();
+	public void displayDialog(final View v) {
+		View parent = (View) v.getParent();
 		TextView tvName = (TextView) parent.findViewById(R.id.tvName);
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(btDelete.getContext());
+		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 		builder.setMessage("Delete entry for " + tvName.getText() + "?");
-		
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override public void onClick(DialogInterface dialog, int which) {
-				animateAndRemove((Integer)parent.getTag(), btDelete);
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dbHelper.delete((String)v.getTag());
+				swapCursor(dbHelper.getAllLoans());
+				updateParentTotal(v);
 			}
 		});
-		
 		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override public void onClick(DialogInterface dialog, int which) {}
+			@Override
+			public void onClick(DialogInterface dialog, int which) {}
 		});
-		
 		builder.show();
 	}
 	
@@ -93,21 +91,6 @@ public class MainAdapter extends CursorAdapter implements OnClickListener {
 		float netSum = dbHelper.getNetSum();
 		TextView tvNetAmount = (TextView) grandParent.findViewById(R.id.tvNetAmount);
 		DbHelper.setTextandColor(grandParent.getContext(), tvNetAmount, netSum);
-	}
-	
-	public void animateAndRemove(int position, final View btDelete) {
-		Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
-		animation.setDuration(500);
-		animation.setAnimationListener(new AnimationListener() {
-			@Override public void onAnimationStart(Animation animation) { }
-			@Override public void onAnimationRepeat(Animation animation) { }
-			@Override public void onAnimationEnd(Animation animation) {
-				dbHelper.delete((String)btDelete.getTag());
-				swapCursor(dbHelper.getAllLoans());
-				updateParentTotal(btDelete);
-			}
-		});
-		listView.getChildAt(position).startAnimation(animation);
 	}
 
 }
