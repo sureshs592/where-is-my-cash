@@ -124,7 +124,7 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 		view.findViewById(R.id.btDelete).setOnClickListener(this);
 		view.findViewById(R.id.btEdit).setOnClickListener(this);
 		
-		view.setOnTouchListener(new SwipeListener(listView, context, this));
+		if (MiscUtil.phoneSupportsSwipe()) view.setOnTouchListener(new SwipeListener(listView, context, this)); //Swipe to delete
 		
 		return view;
 	}
