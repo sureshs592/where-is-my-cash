@@ -13,11 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class EditAdapter extends BaseAdapter implements OnClickListener {
@@ -27,15 +23,13 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
     private static final int TYPE_MAX_COUNT = TYPE_SEPARATOR + 1;
 	
 	private ArrayList<HashMap<String, Object>> items;
-	private ListView listView;
 	private Context context;
 	private LayoutInflater inflater;
 	private String name;
 	private DbHelper dbHelper;
 	
-	public EditAdapter(Context context, ListView listView, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
+	public EditAdapter(Context context, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
 		this.context = context;
-		this.listView = listView;
 		this.items = loans;
 		this.name = name;
 		this.dbHelper = dbHelper;
@@ -79,8 +73,6 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 			convertView = generateSeparatorView(map, convertView);
 			break;
 		}
-		
-		convertView.setTag(position); //Setting the position of the row as the tag of the row view object
 		
 		return convertView;
 	}
@@ -155,23 +147,24 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 	
 	public void displayDialog(final View v) {
 		View parent = (View) v.getParent();
-		final int position = (Integer) parent.getTag();
 		TextView tvAmount = (TextView) parent.findViewById(R.id.tvAmount);
-		
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 		builder.setMessage("Delete entry for " + tvAmount.getText() + "?");
-		
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override public void onClick(DialogInterface dialog, int which) {
-				animateAndRemove(position, v);
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				int tag = (Integer)v.getTag();
+				dbHelper.delete(tag);
+				items = dbHelper.getLoansByNameForDisplay(name);
+				notifyDataSetChanged();
+				updateParentTotal(v);
 			}
 		});
-		
-		//Do nothing if the user clicks no
 		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override public void onClick(DialogInterface dialog, int which) {}
+			@Override
+			public void onClick(DialogInterface dialog, int which) {}
 		});
-		
 		builder.show();
 	}
 	
@@ -180,23 +173,6 @@ public class EditAdapter extends BaseAdapter implements OnClickListener {
 		TextView tvTotal = (TextView) grandParent.findViewById(R.id.tvTotal);
 		float amount = dbHelper.getLoanAmountByName(name);
 		DbHelper.setTextandColor(v.getContext(), tvTotal, amount);
-	}
-	
-	public void animateAndRemove(int position, final View v) {
-		Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
-		animation.setDuration(500);
-		animation.setAnimationListener(new AnimationListener() {
-			@Override public void onAnimationStart(Animation animation) { }
-			@Override public void onAnimationRepeat(Animation animation) { }
-			@Override public void onAnimationEnd(Animation animation) {
-				int tag = (Integer)v.getTag();
-				dbHelper.delete(tag);
-				items = dbHelper.getLoansByNameForDisplay(name);
-				notifyDataSetChanged();
-				updateParentTotal(v);
-			}
-		});
-		listView.getChildAt(position).startAnimation(animation);
 	}
 
 }
