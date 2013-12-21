@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.suresh.whereismycash.DbHelper.PaymentType;
 import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
 
 public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteRowListener {
@@ -184,7 +186,14 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 		dbHelper.delete(tag);
 		items = dbHelper.getLoansByNameForDisplay(name);
 		notifyDataSetChanged();
-		updateParentTotal(v);	
+		updateParentTotal(v);
+		
+		TextView tvAmount = (TextView) v.findViewById(R.id.tvAmount);
+		String amount = (String) tvAmount.getText();
+		String paymentType = (String) tvAmount.getTag();
+		
+		String toastMsg = "Deleted entry to" + ((paymentType.equals(PaymentType.GET.toString())) ? " get " : " pay " ) + amount;
+		Toast.makeText(context, (CharSequence) toastMsg, Toast.LENGTH_SHORT).show();
 	}
 
 }
