@@ -132,6 +132,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 			for (HashMap<String, Object> e : deletedEntries) {
 				float amount = (Float) e.get(DbHelper.KEY_AMOUNT);
 				PaymentType type = DbHelper.getPaymentType(amount);
+				amount = Math.abs(amount);
 				String note = (String) e.get(DbHelper.KEY_NOTE);
 				long dateMillis = (Long) e.get(DbHelper.KEY_DATE);
 				
