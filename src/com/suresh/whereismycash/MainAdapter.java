@@ -14,8 +14,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.SuperActivityToast;
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.SuperToast.Duration;
+import com.github.johnpersano.supertoasts.SuperToast.Type;
+import com.suresh.whereismycash.DbHelper.PaymentType;
 import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
 
 public class MainAdapter extends CursorAdapter implements OnClickListener, DeleteRowListener {
@@ -103,8 +107,38 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 		swapCursor(dbHelper.getAllLoans());
 		updateParentTotal(v);
 		
-		String toastMsg = "Deleted all entries for " + name;
-		Toast.makeText(context, (CharSequence) toastMsg, Toast.LENGTH_SHORT).show();
+		SuperActivityToast toast = new SuperActivityToast(context, Type.BUTTON);
+		toast.setText("Delete all entries for " + name);
+		toast.setDuration(Duration.MEDIUM);
+		toast.setButtonText("UNDO");
+		toast.setButtonResource(SuperToast.Icon.Dark.UNDO);
+        toast.setTextSize(SuperToast.TextSize.LARGE);
+        toast.setButtonOnClickListener(new UndoAction(deletedEntries, name));
+        
+        toast.show();
+	}
+	
+	public class UndoAction implements OnClickListener {
+		
+		private ArrayList<HashMap<String, Object>> deletedEntries;
+		private String name;
+		
+		public UndoAction(ArrayList<HashMap<String, Object>> deletedEntries, String name) {
+			this.deletedEntries = deletedEntries;
+			this.name = name;
+		}
+
+		@Override public void onClick(View v) {
+			for (HashMap<String, Object> e : deletedEntries) {
+				float amount = (Float) e.get(DbHelper.KEY_AMOUNT);
+				PaymentType type = DbHelper.getPaymentType(amount);
+				String note = (String) e.get(DbHelper.KEY_NOTE);
+				long dateMillis = (Long) e.get(DbHelper.KEY_DATE);
+				
+				dbHelper.addEntry(type, amount, name, note, dateMillis);
+			}
+		}
+		
 	}
 
 }
