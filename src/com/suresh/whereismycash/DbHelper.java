@@ -146,9 +146,11 @@ public class DbHelper extends SQLiteOpenHelper {
 		return true;
 	}
 	
-	public void delete(String name) {
+	public ArrayList<HashMap<String, Object>> delete(String name) {
+		ArrayList<HashMap<String, Object>> entries = getLoansByNameAsList(name);
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(DATABASE_TABLE_LOANS, KEY_NAME + " = ?", new String[]{name});
+		return entries;
 	}
 	
 	public void delete(int id) {

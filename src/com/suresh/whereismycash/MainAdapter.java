@@ -1,7 +1,7 @@
 package com.suresh.whereismycash;
 
-import com.suresh.whereismycash.DbHelper.PaymentType;
-import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
 
 public class MainAdapter extends CursorAdapter implements OnClickListener, DeleteRowListener {
 	
@@ -97,7 +99,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 
 	@Override public void deleteRow(View v) {
 		String name = (String)v.getTag();
-		dbHelper.delete(name);
+		ArrayList<HashMap<String, Object>> deletedEntries = dbHelper.delete(name);
 		swapCursor(dbHelper.getAllLoans());
 		updateParentTotal(v);
 		
