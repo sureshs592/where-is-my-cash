@@ -112,7 +112,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 		toast.setDuration(Duration.MEDIUM);
 		toast.setButtonText("UNDO");
 		toast.setButtonResource(SuperToast.Icon.Dark.UNDO);
-        toast.setTextSize(SuperToast.TextSize.LARGE);
+        toast.setTextSize(SuperToast.TextSize.MEDIUM);
         toast.setButtonOnClickListener(new UndoAction(deletedEntries, name));
         
         toast.show();
