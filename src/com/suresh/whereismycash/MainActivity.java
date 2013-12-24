@@ -81,7 +81,10 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 	protected void onResume() {
 		super.onResume();
 		initializeList();
-		
+		updateParentTotal();
+	}
+	
+	public void updateParentTotal() {
 		float netSum = dbHelper.getNetSum();
 		TextView tvNetAmount = (TextView) findViewById(R.id.tvNetAmount);
 		DbHelper.setTextandColor(this, tvNetAmount, netSum);

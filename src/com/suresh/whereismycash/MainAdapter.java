@@ -27,13 +27,13 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 	private DbHelper dbHelper;
 	private Context context;
 	private ListView listView;
-	private OnClickListener parentActivity;
+	private MainActivity parentActivity;
 
-	public MainAdapter(Context context, ListView listView, Cursor c, int flags, DbHelper dbHelper) {
-		super(context, c, flags);
-		this.context = context;
+	public MainAdapter(MainActivity parentActivity, ListView listView, Cursor c, int flags, DbHelper dbHelper) {
+		super(parentActivity, c, flags);
+		this.context = parentActivity;
 		this.listView = listView;
-		parentActivity = (OnClickListener) context;
+		this.parentActivity = parentActivity;
 		this.dbHelper = dbHelper;
 	}
 
@@ -93,19 +93,13 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 		builder.show();
 	}
 	
-	public void updateParentTotal(View v) {
-		View grandParent = (View) v.getParent().getParent().getParent();
-		
-		float netSum = dbHelper.getNetSum();
-		TextView tvNetAmount = (TextView) grandParent.findViewById(R.id.tvNetAmount);
-		DbHelper.setTextandColor(grandParent.getContext(), tvNetAmount, netSum);
-	}
+	
 
 	@Override public void deleteRow(View v) {
 		String name = (String)v.getTag();
 		ArrayList<HashMap<String, Object>> deletedEntries = dbHelper.delete(name);
 		swapCursor(dbHelper.getAllLoans());
-		updateParentTotal(v);
+		parentActivity.updateParentTotal();
 		
 		SuperActivityToast toast = new SuperActivityToast(context, Type.BUTTON);
 		toast.setText("Delete all entries for " + name);
@@ -137,6 +131,8 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 				long dateMillis = (Long) e.get(DbHelper.KEY_DATE);
 				
 				dbHelper.addEntry(type, amount, name, note, dateMillis);
+				swapCursor(dbHelper.getAllLoans());
+				parentActivity.updateParentTotal();
 			}
 		}
 		
