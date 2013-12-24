@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -65,5 +66,11 @@ public class EditActivity extends SherlockListActivity {
 		TextView tvTotal = (TextView) findViewById(R.id.tvTotal);
 		DbHelper.setTextandColor(this, tvTotal, amount);
 		initializeList();
+	}
+	
+	public void updateParentTotal() {
+		TextView tvTotal = (TextView) findViewById(R.id.tvTotal);
+		float amount = dbHelper.getLoanAmountByName(name);
+		DbHelper.setTextandColor(this, tvTotal, amount);
 	}
 }

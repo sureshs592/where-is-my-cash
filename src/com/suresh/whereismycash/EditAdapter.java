@@ -18,6 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.SuperActivityToast;
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.SuperToast.Duration;
+import com.github.johnpersano.supertoasts.SuperToast.Type;
 import com.suresh.whereismycash.DbHelper.PaymentType;
 import com.suresh.whereismycash.SwipeListener.DeleteRowListener;
 
@@ -29,13 +33,15 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 	
 	private ArrayList<HashMap<String, Object>> items;
 	private Context context;
+	private EditActivity parentActivity;
 	private ListView listView;
 	private LayoutInflater inflater;
 	private String name;
 	private DbHelper dbHelper;
 	
-	public EditAdapter(Context context, ListView listView, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
-		this.context = context;
+	public EditAdapter(EditActivity parentActivity, ListView listView, ArrayList<HashMap<String, Object>> loans, String name, DbHelper dbHelper) {
+		this.context = parentActivity;
+		this.parentActivity = parentActivity;
 		this.listView = listView;
 		this.items = loans;
 		this.name = name;
@@ -172,13 +178,6 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 		});
 		builder.show();
 	}
-	
-	public void updateParentTotal(View v) {
-		View grandParent = (View) v.getParent().getParent().getParent();
-		TextView tvTotal = (TextView) grandParent.findViewById(R.id.tvTotal);
-		float amount = dbHelper.getLoanAmountByName(name);
-		DbHelper.setTextandColor(v.getContext(), tvTotal, amount);
-	}
 
 	@Override
 	public void deleteRow(View v) {
@@ -186,17 +185,49 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 		TextView tvAmount = (TextView) v.findViewById(R.id.tvAmount);
 		String amount = (String) tvAmount.getText();
 		String paymentType = (String) tvAmount.getTag();
+		PaymentType type = PaymentType.valueOf(paymentType);
+		long dateMillis = (Long) v.findViewById(R.id.tvDate).getTag();
+		String note = (String) ((TextView) v.findViewById(R.id.tvNote)).getText();
 		
 		int tag = (Integer)v.getTag();
 		dbHelper.delete(tag);
 		items = dbHelper.getLoansByNameForDisplay(name);
 		notifyDataSetChanged();
-		updateParentTotal(v);
+		parentActivity.updateParentTotal();
 		
+		String toastMsg = "Deleted entry to" + ((type == PaymentType.GET) ? " get " : " pay ") + amount;
+		SuperActivityToast toast = new SuperActivityToast(context, Type.BUTTON);
+		toast.setText(toastMsg);
+		toast.setDuration(Duration.MEDIUM);
+		toast.setButtonText("UNDO");
+		toast.setButtonResource(SuperToast.Icon.Dark.UNDO);
+        toast.setTextSize(SuperToast.TextSize.MEDIUM);
+        toast.setButtonOnClickListener(new UndoAction(type, Float.valueOf(amount), note, dateMillis));
+        
+        toast.show();
+	}
+	
+	public class UndoAction implements OnClickListener {
 		
+		private PaymentType type;
+		private float amount;
+		private String note;
+		private long dateMillis;
 		
-		String toastMsg = "Deleted entry to" + ((paymentType.equals(PaymentType.GET.toString())) ? " get " : " pay " ) + amount;
-		Toast.makeText(context, (CharSequence) toastMsg, Toast.LENGTH_SHORT).show();
+		public UndoAction(PaymentType type, float amount, String note, long dateMillis) {
+			this.type = type;
+			this.amount = amount;
+			this.note = note;
+			this.dateMillis = dateMillis;
+		}
+
+		@Override public void onClick(View v) {
+			dbHelper.addEntry(type, amount, name, note, dateMillis);
+			items = dbHelper.getLoansByNameForDisplay(name);
+			notifyDataSetChanged();
+			parentActivity.updateParentTotal();
+		}
+		
 	}
 
 }
