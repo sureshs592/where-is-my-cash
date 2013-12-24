@@ -102,7 +102,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 		parentActivity.updateParentTotal();
 		
 		SuperActivityToast toast = new SuperActivityToast(context, Type.BUTTON);
-		toast.setText("Delete all entries for " + name);
+		toast.setText("Deleted all entries for " + name);
 		toast.setDuration(Duration.MEDIUM);
 		toast.setButtonText("UNDO");
 		toast.setButtonResource(SuperToast.Icon.Dark.UNDO);
