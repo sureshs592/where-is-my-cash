@@ -220,7 +220,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			map.put(KEY_ID, c.getInt(c.getColumnIndex(DbHelper.KEY_ID)));
 			map.put(KEY_AMOUNT, c.getFloat(c.getColumnIndex(DbHelper.KEY_AMOUNT)));
 			map.put(KEY_NOTE, c.getString(c.getColumnIndex(DbHelper.KEY_NOTE)));
-			map.put(KEY_DATE, c.getString(c.getColumnIndex(DbHelper.KEY_DATE)));
+			map.put(KEY_DATE, c.getLong(c.getColumnIndex(DbHelper.KEY_DATE)));
 			
 			list.add(map);
 		}
@@ -236,7 +236,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			HashMap<String, Object> item = list.get(i);
 			String monthFormat = (String) DateFormat.format(
 					context.getString(R.string.section_header_format),
-					Long.parseLong((String) item.get(KEY_DATE)));
+					(Long) item.get(KEY_DATE));
 			monthFormat = monthFormat.toUpperCase();
 			
 			if (!monthFormat.equals(prevFormat)) {
@@ -291,5 +291,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		tv.setText(String.valueOf(amount));
 		tv.setTextColor(context.getResources().getColor(color));
 		tv.setTag(tag);
+	}
+	
+	public static PaymentType getPaymentType(float amount) {
+		if (amount < 0) {
+			return PaymentType.GET;
+		} else if (amount > 0) {
+			return PaymentType.PAY;
+		} else {
+			return PaymentType.GET;
+		}
 	}
 }

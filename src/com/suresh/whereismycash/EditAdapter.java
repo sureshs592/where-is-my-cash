@@ -111,7 +111,7 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 		
 		//Setting the date
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(Long.parseLong((String) map.get(DbHelper.KEY_DATE)));
+		cal.setTimeInMillis((Long) map.get(DbHelper.KEY_DATE));
 
 		((TextView) view.findViewById(R.id.tvDate))
 			.setText(DateFormat.format(context.getString(R.string.date_view_format), cal.getTime()));
