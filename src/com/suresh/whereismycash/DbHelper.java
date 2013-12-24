@@ -113,7 +113,6 @@ public class DbHelper extends SQLiteOpenHelper {
 			return false;
 		} finally {
 			db.endTransaction();
-			db.close();
 		}
 		
 		return true;
