@@ -5,7 +5,7 @@
     <string name="section_header_format">MMM yyyy</string>
     <string name="date_view_format">EEE, d MMM</string>
 	<string name="update_dialog_title">App Updated!</string>  
-    <string name="update_info">Version 1.5:\n\n- Swipe to delete entries (Android 3.0 and above)</string>
+    <string name="update_info">Version 1.6:\n\n- Undo delete\n\nVersion 1.5:\n\n- Swipe to delete entries (Android 3.0 and above)</string>
     <string name="dialog_ok">OK</string>
     
 	<!-- MENU OPTIONS -->

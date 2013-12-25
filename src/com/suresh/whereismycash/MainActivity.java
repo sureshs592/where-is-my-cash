@@ -96,7 +96,7 @@ public class MainActivity extends SherlockListActivity implements OnClickListene
 			int storedVersionCode = info.getInt("versionCode", -1);
 			int currentVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
 			
-			if (storedVersionCode < currentVersionCode && MiscUtil.phoneSupportsSwipe()) { //Display information dialog
+			if (storedVersionCode < currentVersionCode) { //Display information dialog
 				AlertDialog.Builder builder = new Builder(this);
 				builder.setTitle(R.string.update_dialog_title);
 				builder.setMessage(R.string.update_info);
