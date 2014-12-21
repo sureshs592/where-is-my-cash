@@ -171,7 +171,7 @@ OnItemClickListener, OnCheckedChangeListener {
 			triggerDateDialog();
 			break;
 		case R.id.btAction:
-			String text = (String) ((Button)v).getText();
+			String text = ((Button)v).getText().toString();
 			if (text.equals(getResources().getString(R.string.btn_add))) {
 				create();	
 			} else {

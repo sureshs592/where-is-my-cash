@@ -78,7 +78,7 @@ public class MainAdapter extends CursorAdapter implements OnClickListener, Delet
 		View parent = (View) v.getParent();
 		TextView tvName = (TextView) parent.findViewById(R.id.tvName);
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-		builder.setMessage("Delete entry for " + tvName.getText() + "?");
+		builder.setMessage("Delete entry for " + tvName.getText().toString() + "?");
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			
 			@Override

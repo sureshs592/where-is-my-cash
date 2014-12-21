@@ -151,9 +151,9 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 			i.putExtra("id", id);
 			TextView tvAmount = (TextView) parent.findViewById(R.id.tvAmount);
 			i.putExtra("paymentType", (String)tvAmount.getTag());
-			i.putExtra("amount", (String)tvAmount.getText());
+			i.putExtra("amount", tvAmount.getText().toString());
 			TextView tvNote = (TextView) parent.findViewById(R.id.tvNote);
-			i.putExtra("note", (String)tvNote.getText());
+			i.putExtra("note", tvNote.getText().toString());
 			i.putExtra("date", (Long) parent.findViewById(R.id.tvDate).getTag());
 			v.getContext().startActivity(i);
 			break;
@@ -164,7 +164,7 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 		View parent = (View) v.getParent();
 		TextView tvAmount = (TextView) parent.findViewById(R.id.tvAmount);
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-		builder.setMessage("Delete entry for " + tvAmount.getText() + "?");
+		builder.setMessage("Delete entry for " + tvAmount.getText().toString() + "?");
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -183,11 +183,11 @@ public class EditAdapter extends BaseAdapter implements OnClickListener, DeleteR
 	public void deleteRow(View v) {
 		if (v.getId() == R.id.btDelete) v = (View) v.getParent();
 		TextView tvAmount = (TextView) v.findViewById(R.id.tvAmount);
-		String amount = (String) tvAmount.getText();
+		String amount = tvAmount.getText().toString();
 		String paymentType = (String) tvAmount.getTag();
 		PaymentType type = PaymentType.valueOf(paymentType);
 		long dateMillis = (Long) v.findViewById(R.id.tvDate).getTag();
-		String note = (String) ((TextView) v.findViewById(R.id.tvNote)).getText();
+		String note = ((TextView) v.findViewById(R.id.tvNote)).getText().toString();
 		
 		int tag = (Integer)v.getTag();
 		dbHelper.delete(tag);
